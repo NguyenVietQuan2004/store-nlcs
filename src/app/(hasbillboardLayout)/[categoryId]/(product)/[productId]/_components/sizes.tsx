@@ -1,26 +1,33 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { currentSizeProps } from "./productInfor";
 
-type objectPriceType = Omit<currentSizeProps, "colorUserSelect" | "imagesUserSelect">;
+interface objectPriceProps {
+  size: string;
+  price: number;
+  colors: Array<string>;
+  amount: number;
+}
 
 interface SizeProps {
   currentSize: currentSizeProps;
-  arrayPrice: objectPriceType[];
+  arrayPrice: objectPriceProps[];
   setCurrentSize: React.Dispatch<React.SetStateAction<currentSizeProps>>;
 }
 
 function Sizes({ arrayPrice, currentSize, setCurrentSize }: SizeProps) {
-  const handleChangeSize = (objectPrice: objectPriceType) => {
+  const handleChangeSize = (objectPrice: objectPriceProps) => {
     setCurrentSize({
       ...currentSize,
       size: objectPrice.size,
       price: objectPrice.price,
       colors: objectPrice.colors,
+      currentAmount: 2,
+      // currentAmount: objectPrice.amount,
       colorUserSelect: objectPrice.colors[0],
     });
   };
   return (
-    <div className="font-semibold flex gap-3">
+    <div className="font-semibold flex gap-3 flex-wrap items-center">
       Size:
       {arrayPrice.map((objectPrice) => {
         const disabled = objectPrice.size === currentSize.size;

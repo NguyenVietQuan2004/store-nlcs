@@ -1,8 +1,38 @@
 //////////////////////////////-----PRODUCT TYPE-----//////////////////////////////
 
 import z from "zod";
+import { Color } from "@/Type/ColorType";
+import { Size } from "@/Type/SizeTypes";
+import { Category } from "@/Type/CategoryTypes";
 
-//  PRODUCT BODY TYPE
+export const Product = z.object({
+  _id: z.string(),
+  images: z.array(z.string()),
+  name: z.string(),
+  storeId: z.string(),
+  arrayPrice: z.array(
+    z.object({
+      size: z.string(),
+      price: z.number(),
+      colors: z.array(z.string()),
+      amount: z.number(),
+    })
+  ),
+  categoryId: z.object({
+    _id: z.string(),
+    name: z.string(),
+    storeId: z.string(),
+    billboardId: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
+  isFeature: z.boolean(),
+  isArchive: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+//  PRODUCT BODY TYPE -- chỗ này khác với client
 export const ProductBody = z.object({
   productId: z.string(),
   categoryId: z.string(),
@@ -12,88 +42,11 @@ export type ProductBodyType = z.TypeOf<typeof ProductBody>;
 //  PRODUCT RES TYPE
 export const ProductRes = z.object({
   data: z.object({
-    product: z.object({
-      _id: z.string(),
-      images: z.array(z.string()),
-      name: z.string(),
-      storeId: z.string(),
-      arrayPrice: z.array(
-        z.object({
-          size: z.string(),
-          price: z.number(),
-          colors: z.array(z.string()),
-        })
-      ),
-      categoryId: z.object({
-        _id: z.string(),
-        name: z.string(),
-        storeId: z.string(),
-        billboardId: z.string(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-      }),
-      isFeature: z.boolean(),
-      isArchive: z.boolean(),
-      createdAt: z.string(),
-      updatedAt: z.string(),
-    }),
-    listColor: z.array(
-      z.object({
-        _id: z.string(),
-        name: z.string(),
-        storeId: z.string(),
-        value: z.string(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-      })
-    ),
-    listSize: z.array(
-      z.object({
-        _id: z.string(),
-        name: z.string(),
-        storeId: z.string(),
-        value: z.string(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-      })
-    ),
-    listCategory: z.array(
-      z.object({
-        _id: z.string(),
-        name: z.string(),
-        storeId: z.string(),
-        billboardId: z.string(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-      })
-    ),
-    productsRelative: z.array(
-      z.object({
-        _id: z.string(),
-        images: z.array(z.string()),
-        name: z.string(),
-        storeId: z.string(),
-        arrayPrice: z.array(
-          z.object({
-            size: z.string(),
-            price: z.number(),
-            colors: z.array(z.string()),
-          })
-        ),
-        categoryId: z.object({
-          _id: z.string(),
-          name: z.string(),
-          storeId: z.string(),
-          billboardId: z.string(),
-          createdAt: z.string(),
-          updatedAt: z.string(),
-        }),
-        isFeature: z.boolean(),
-        isArchive: z.boolean(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-      })
-    ),
+    product: Product,
+    listColor: z.array(Color),
+    listSize: z.array(Size),
+    listCategory: z.array(Category),
+    productsRelative: z.array(Product),
   }),
   message: z.string(),
   ok: z.boolean(),
@@ -103,45 +56,25 @@ export type ProductResType = z.TypeOf<typeof ProductRes>;
 
 // PRODUCT TYPE
 
-export type ProductType = Omit<ProductResType, "message" | "ok" | "statusCode">["data"]["product"];
+export type ProductType = z.TypeOf<typeof Product>;
 
-// LIST PRODUCT BODY TYPE
+// LIST PRODUCT BODY TYPE -- khác với client
 export const ListProductBody = z.object({
-  categoryId: z.string(),
-  colorId: z.string(),
-  sizeId: z.string(),
+  categoryId: z.string().optional(),
+  colorId: z.string().optional(),
+  sizeId: z.string().optional(),
+  isFeature: z.boolean().optional(),
+  page: z.number(),
+  limit: z.number(),
 });
 export type ListProductBodyType = z.TypeOf<typeof ListProductBody>;
 
 // LIST PRODUCT RES TYPE
 export const ListProductRes = z.object({
-  data: z.array(
-    z.object({
-      _id: z.string(),
-      name: z.string(),
-      storeId: z.string(),
-      images: z.array(z.string()),
-      arrayPrice: z.array(
-        z.object({
-          size: z.string(),
-          price: z.number(),
-          colors: z.array(z.string()),
-        })
-      ),
-      categoryId: z.object({
-        _id: z.string(),
-        name: z.string(),
-        storeId: z.string(),
-        billboardId: z.string(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-      }),
-      isFeature: z.boolean(),
-      isArchive: z.boolean(),
-      createdAt: z.string(),
-      updatedAt: z.string(),
-    })
-  ),
+  data: z.object({
+    listProduct: z.array(Product),
+    totalProduct: z.number(),
+  }),
   message: z.string(),
   ok: z.boolean(),
   statusCode: z.number(),
@@ -149,7 +82,6 @@ export const ListProductRes = z.object({
 export type ListProductResType = z.TypeOf<typeof ListProductRes>;
 
 //  CREATE PRODUCT BODY TYPE
-///////////////////////////////////////// casi nayf chua chinh
 export const CreateProductBody = z.object({
   images: z.array(z.string()),
   name: z.string(),
@@ -169,24 +101,7 @@ export type CreateProductBodyType = z.TypeOf<typeof CreateProductBody>;
 
 //  CREATE PRODUCT RES TYPE
 export const CreateProductRes = z.object({
-  data: z.object({
-    _id: z.string(),
-    images: z.array(z.string()),
-    name: z.string(),
-    storeId: z.string(),
-    arrayPrice: z.array(
-      z.object({
-        size: z.string(),
-        price: z.number(),
-        colors: z.array(z.string()),
-      })
-    ),
-    categoryId: z.string(),
-    isFeature: z.boolean(),
-    isArchive: z.boolean(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }),
+  data: Product,
   message: z.string(),
   ok: z.boolean(),
   statusCode: z.number(),
@@ -194,7 +109,6 @@ export const CreateProductRes = z.object({
 export type CreateProductResType = z.TypeOf<typeof CreateProductRes>;
 
 /// UPDATE PRODUCT BODY TYPE
-///////////////////////// cai nay chua chinh
 export const UpdateProductBody = z.object({
   _id: z.string(),
   images: z.array(z.string()),
@@ -215,24 +129,7 @@ export type UpdateProductBodyType = z.TypeOf<typeof UpdateProductBody>;
 
 /// UPDATE PRODUCT RES TYPE
 export const UpdateProductRes = z.object({
-  data: z.object({
-    _id: z.string(),
-    images: z.array(z.string()),
-    name: z.string(),
-    storeId: z.string(),
-    arrayPrice: z.array(
-      z.object({
-        size: z.string(),
-        price: z.number(),
-        colors: z.array(z.string()),
-      })
-    ),
-    categoryId: z.string(),
-    isFeature: z.boolean(),
-    isArchive: z.boolean(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }),
+  data: Product,
   message: z.string(),
   ok: z.boolean(),
   statusCode: z.number(),
@@ -248,24 +145,7 @@ export type DeleteProductBodyType = z.TypeOf<typeof DeleteProductBody>;
 
 /// DELETE PRODUCT RES TYPE
 export const DeleteProductRes = z.object({
-  data: z.object({
-    _id: z.string(),
-    images: z.array(z.string()),
-    name: z.string(),
-    storeId: z.string(),
-    arrayPrice: z.array(
-      z.object({
-        size: z.string(),
-        price: z.number(),
-        colors: z.array(z.string()),
-      })
-    ),
-    categoryId: z.string(),
-    isFeature: z.boolean(),
-    isArchive: z.boolean(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }),
+  data: Product,
   message: z.string(),
   ok: z.boolean(),
   statusCode: z.number(),

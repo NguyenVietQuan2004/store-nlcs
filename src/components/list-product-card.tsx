@@ -4,7 +4,13 @@ import ProductCard from "@/components/product-card";
 import PreviewModal from "@/components/previewModal";
 import { ListProductResType } from "@/Type/ProductType";
 
-function ListProductCard({ listProduct, gridCols }: { listProduct: ListProductResType["data"]; gridCols: number }) {
+function ListProductCard({
+  listProduct,
+  gridCols,
+}: {
+  listProduct: ListProductResType["data"]["listProduct"] | undefined;
+  gridCols: number;
+}) {
   return (
     <>
       <PreviewModal />{" "}

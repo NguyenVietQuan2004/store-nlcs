@@ -7,7 +7,7 @@ interface SizeProps {
 
 function Colors({ currentSize, setCurrentSize }: SizeProps) {
   return (
-    <div className="my-5 flex items-center justify-start">
+    <div className="my-5 flex items-center justify-start flex-wrap">
       <span className="font-semibold">Color: </span>{" "}
       {currentSize.colors.map((color: string) => (
         <div

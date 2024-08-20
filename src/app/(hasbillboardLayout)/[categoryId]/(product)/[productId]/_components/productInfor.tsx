@@ -21,6 +21,7 @@ export interface currentSizeProps {
   colors: Array<string>;
   colorUserSelect: string;
   imagesUserSelect: string;
+  currentAmount: number;
 }
 function ProductInfor({ product }: ProductInforProps) {
   const [currentSize, setCurrentSize] = useState<currentSizeProps>({
@@ -29,7 +30,10 @@ function ProductInfor({ product }: ProductInforProps) {
     colors: product.arrayPrice[0].colors,
     colorUserSelect: product.arrayPrice[0].colors[0],
     imagesUserSelect: product.images[0],
+    // currentAmount: product.arrayPrice[0].amount,
+    currentAmount: 2,
   });
+  console.log(currentSize.currentAmount);
   const { addItem, items } = useCart();
   const handleAddtoCart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -37,8 +41,10 @@ function ProductInfor({ product }: ProductInforProps) {
       product,
       size: currentSize.size,
       color: currentSize.colorUserSelect,
+      amount: currentSize.currentAmount,
     });
   };
+
   return (
     <div className="grid grid-cols-7 gap-x-9">
       <div className="col-span-3">
@@ -50,12 +56,14 @@ function ProductInfor({ product }: ProductInforProps) {
           src={currentSize.imagesUserSelect}
           priority
         />
-        <div className="mt-4  grid grid-cols-4 gap-3">
+        <div className="mt-4 grid grid-cols-4 gap-3">
           {product.images.map((image) => (
             <div
               onClick={() => setCurrentSize({ ...currentSize, imagesUserSelect: image })}
               key={image}
-              className="border-[3px] border-transparent hover:border-black rounded-sm p-1"
+              className={`${
+                image === currentSize.imagesUserSelect ? "border-black" : "border-transparent"
+              } border-[3px]  hover:border-black rounded-sm p-1`}
             >
               <Image
                 alt=""
@@ -69,13 +77,14 @@ function ProductInfor({ product }: ProductInforProps) {
           ))}
         </div>
       </div>
-      <div className="col-span-3">
+      <div className="col-span-4">
         <h2 className="text-2xl font-bold">{product.name}</h2>
         <div className="mt-3 font-semibold">{formattedPrice(currentSize.price)}</div>
         <Separator className="my-5" />
         <Sizes setCurrentSize={setCurrentSize} currentSize={currentSize} arrayPrice={product.arrayPrice} />
+        <div>Max amount: {currentSize.currentAmount}</div>
         <Colors currentSize={currentSize} setCurrentSize={setCurrentSize} />
-        <Button className="mt-6 rounded-full" onClick={handleAddtoCart}>
+        <Button className="mt-6 rounded-full" onClick={handleAddtoCart} disabled={currentSize.currentAmount === 12}>
           Add to cart <ShoppingCart className="ml-2" size={20} />
         </Button>
       </div>

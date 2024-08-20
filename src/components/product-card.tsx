@@ -10,6 +10,7 @@ import { formattedPrice } from "@/lib/utils";
 import { ProductType } from "@/Type/ProductType";
 import IconButton from "@/components/icon-button";
 import { useModalPreview } from "@/hooks/use-modal-preview";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: ProductType;
@@ -17,26 +18,26 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const price = product.arrayPrice[0].price;
-  const router = useRouter();
   const { onOpen } = useModalPreview();
   const { addItem, items } = useCart();
   const onPreview: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
+    e.preventDefault();
     onOpen(product);
   };
   const handleAddtoCart: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
+    e.preventDefault();
     addItem({
       product,
       size: product.arrayPrice[0].size,
       color: product.arrayPrice[0].colors[0],
+      amount: 2,
     });
   };
   return (
-    <div
+    <Link
       key={product._id}
-      onClick={() => router.push(`/${product.categoryId._id}/${product._id}`)}
-      className="group  border rounded-lg p-2 cursor-pointer"
+      href={`/${product.categoryId._id}/${product._id}`}
+      className="group  border rounded-lg p-2 cursor-pointer  flex flex-col select-none"
     >
       <div className="relative">
         <Image
@@ -60,10 +61,14 @@ function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </div>
-      <div className="font-semibold mt-2"> {product.name} </div>
-      <div className="text-sm text-zinc-600 font-semibold"> {product.categoryId.name} </div>
-      <div className="mt-3 font-semibold">{formattedPrice(price)}</div>
-    </div>
+      <div className="flex flex-col justify-between h-full">
+        <div className="font-semibold mt-2 text-sm line-clamp-2"> {product.name} </div>
+        <div>
+          <div className="text-sm text-zinc-500 font-semibold my-1"> {product.categoryId.name} </div>
+          <div className="mt-3 font-semibold">{formattedPrice(price)}</div>
+        </div>
+      </div>
+    </Link>
   );
 }
 

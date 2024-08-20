@@ -38,14 +38,15 @@ function Filter({ data, name, valueKey }: FilterProps) {
   };
   return (
     <div>
-      <h3>{name}</h3>
+      <h3 className="font-semibold">{name}</h3>
       <Separator className="my-4" />
-      <div className="grid grid-cols-3 gap-2">
+      <div className="flex flex-wrap gap-2">
         {data?.map((item) => (
           <Button
             key={item.name}
             onClick={() => handleOnclick(item._id)}
             variant="outline"
+            size={"sm"}
             className={`${selectedValue === item._id && "bg-black text-white"}`}
           >
             {item.name}

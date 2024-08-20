@@ -24,6 +24,10 @@ export const useCart = create(
           });
           return;
         }
+        toast({
+          title: "Add to cart success",
+          variant: "success",
+        });
         set({ items: [...currentItems, product] });
       },
       removeItem: (product: productOrderType) => {

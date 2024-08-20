@@ -12,9 +12,9 @@ interface ProductIdClientProps {
 function ProductIdClient({ data }: ProductIdClientProps) {
   const product = data?.product;
   const productRelative = data?.productsRelative;
-
+  console.log(product);
   return (
-    <div>
+    <div className="mt-24">
       <ProductInfor product={product} />
       <Separator className="my-10" />
       <div>

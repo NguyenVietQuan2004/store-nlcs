@@ -12,9 +12,8 @@ function PreviewModal() {
       <DialogContent showIcon={true} setIsShowModal={onClose} className="p-4">
         <DialogHeader>
           <DialogTitle></DialogTitle>
-          <DialogDescription>
-            <ProductInfor product={data} />
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
+          <ProductInfor product={data} />
         </DialogHeader>
       </DialogContent>
     </Dialog>

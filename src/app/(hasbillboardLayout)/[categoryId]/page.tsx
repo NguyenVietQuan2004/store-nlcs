@@ -17,22 +17,24 @@ async function CategoryId({
   let listProduct: ListProductResType | null = null;
   let sizes: ListSizeResType | null = null;
   let colors: ListColorResType | null = null;
+  const limitServer = 36;
 
   try {
     listProduct = await productAPI.getListProduct({
       categoryId: params.categoryId,
       sizeId: searchParams.sizeId,
       colorId: searchParams.colorId,
+      page: 1,
+      limit: limitServer,
     });
     sizes = await sizeAPI.getListSize();
     colors = await colorAPI.getListColor();
   } catch (error) {
     handlError({ consoleError: "GET_LIST_PRODUCT_SIZES_COLORS_API_ERROR", error });
   }
-
   return (
     <>
-      <CategoryClient listProduct={listProduct} sizes={sizes} colors={colors} />
+      <CategoryClient limitServer={limitServer} listProductInit={listProduct} sizes={sizes} colors={colors} />
     </>
   );
 }

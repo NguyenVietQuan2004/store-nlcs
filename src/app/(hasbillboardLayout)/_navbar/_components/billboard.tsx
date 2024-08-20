@@ -3,7 +3,7 @@ import { BillboardType } from "@/Type/BillboardTypes";
 
 function Billboard({ billboard }: { billboard: BillboardType | undefined }) {
   return (
-    <div className="relative my-10">
+    <div className="relative mb-10 mt-24">
       {billboard && (
         <Image
           alt=""
