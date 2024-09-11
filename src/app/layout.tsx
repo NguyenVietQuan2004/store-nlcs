@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
-import Footer from "@/components/Footer";
+import Footer from "@/components/footer";
 import Wrapper from "@/components/wrapper";
 import { Toaster } from "@/components/ui/toaster";
-import MainNav from "@/app/(hasbillboardLayout)/_navbar/navbar";
+import PreviewModal from "@/components/preview-modal";
+import UpdateSizeModal from "@/components/update-size-model";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,11 +24,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className}>
         <Toaster />
-        <Wrapper>
-          <MainNav />
-          {children}
-          <Footer />
-        </Wrapper>
+        <PreviewModal />
+        <UpdateSizeModal />
+        <Wrapper>{children}</Wrapper>
+        <Footer />
       </body>
     </html>
   );

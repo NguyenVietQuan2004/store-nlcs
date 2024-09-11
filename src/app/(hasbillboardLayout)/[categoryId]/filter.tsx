@@ -1,58 +1,61 @@
 "use client";
 
-import queryString from "query-string";
-import { useRouter, useSearchParams } from "next/navigation";
+import { SetStateAction, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ListSizeResType } from "@/Type/SizeTypes";
 import { ListColorResType } from "@/Type/ColorType";
 import { Separator } from "@/components/ui/separator";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface FilterProps {
-  data: ListSizeResType["data"] | ListColorResType["data"] | undefined;
-  valueKey: string;
+  filter: any;
   name: string;
+  valueKey: string;
+  autoShow?: boolean;
+  setFilter: React.Dispatch<SetStateAction<any>>;
+  data: ListSizeResType["data"] | ListColorResType["data"] | undefined;
 }
 
-function Filter({ data, name, valueKey }: FilterProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  let selectedValue = searchParams.get(valueKey);
-  const currentQuery = queryString.parse(searchParams.toString());
-  const handleOnclick = (_id: string) => {
-    selectedValue = selectedValue ? (selectedValue === _id ? null : _id) : _id;
+function Filter({ data, name, valueKey, setFilter, filter, autoShow = false }: FilterProps) {
+  const [isOpen, setIsOpen] = useState(autoShow);
 
-    const query = {
-      ...currentQuery,
-      [valueKey]: selectedValue,
-    };
-    const url = queryString.stringifyUrl(
-      {
-        url: window.location.href,
-        query,
-      },
-      { skipNull: true }
-    );
-    router.push(url);
-    router.refresh();
+  const handleOnclick = (_id: string) => {
+    setFilter((pre: any) => {
+      return _id === pre[valueKey] ? { ...pre, [valueKey]: undefined } : { ...pre, [valueKey]: _id };
+    });
   };
   return (
     <div>
-      <h3 className="font-semibold">{name}</h3>
-      <Separator className="my-4" />
-      <div className="flex flex-wrap gap-2">
-        {data?.map((item) => (
-          <Button
-            key={item.name}
-            onClick={() => handleOnclick(item._id)}
-            variant="outline"
-            size={"sm"}
-            className={`${selectedValue === item._id && "bg-black text-white"}`}
-          >
-            {item.name}
-          </Button>
-        ))}
-      </div>
+      <Collapsible open={isOpen}>
+        <CollapsibleTrigger className="w-full">
+          <div className="flex justify-between">
+            <h3 className="font-semibold">{name}</h3>
+            {isOpen ? (
+              <ChevronUp className="hidden lg:block" onClick={() => setIsOpen(!isOpen)} />
+            ) : (
+              <ChevronDown className="hidden lg:block" onClick={() => setIsOpen(!isOpen)} />
+            )}
+          </div>
+          <Separator className="my-6 lg:my-4" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="flex flex-wrap gap-2 mb-2">
+            {data?.map((item) => (
+              <Button
+                key={item.name}
+                onClick={() => handleOnclick(item._id)}
+                variant="outline"
+                size={"sm"}
+                className={`${(filter.sizeId === item._id || filter.colorId === item._id) && "bg-black text-white "}`}
+              >
+                {item.name}
+              </Button>
+            ))}
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

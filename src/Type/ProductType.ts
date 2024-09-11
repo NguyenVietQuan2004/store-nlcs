@@ -63,17 +63,25 @@ export const ListProductBody = z.object({
   categoryId: z.string().optional(),
   colorId: z.string().optional(),
   sizeId: z.string().optional(),
-  isFeature: z.boolean().optional(),
   page: z.number(),
   limit: z.number(),
+  sortBy: z.string().optional(),
+  value: z.string().optional(),
 });
 export type ListProductBodyType = z.TypeOf<typeof ListProductBody>;
+// LIST PRODUCT BY ID BODY TYPE
+export const ListProductByIdBody = z.object({
+  listIdProduct: z.array(z.string()),
+});
+export type ListProductByIdBodyType = z.TypeOf<typeof ListProductByIdBody>;
 
 // LIST PRODUCT RES TYPE
 export const ListProductRes = z.object({
   data: z.object({
     listProduct: z.array(Product),
     totalProduct: z.number(),
+    listColor: z.array(Color),
+    listSize: z.array(Size),
   }),
   message: z.string(),
   ok: z.boolean(),

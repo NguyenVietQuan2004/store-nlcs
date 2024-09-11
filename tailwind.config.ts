@@ -1,13 +1,8 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -18,6 +13,15 @@ const config = {
       },
     },
     extend: {
+      flex: {
+        "3": "3 3 0%",
+        "0": "0 0 0%",
+        "4": "4 4 0%",
+        "5": "5 5 0%",
+      },
+      transitionDuration: {
+        "9000": "9000ms",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -67,14 +71,37 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "animate-search-input": {
+          "0%": { left: "100%", top: "30px" },
+          "5%": { left: "0", top: "30px" },
+          "25%": { left: "0", top: "30px" },
+          "50%": { top: "0", left: "0" },
+          "100%": { top: "0", left: "0" },
+        },
+        "animate-search-input-mobile": {
+          "0%": { left: "100%", top: "0" },
+          "100%": { top: "0", left: "0" },
+        },
+        "animate-cart-view": {
+          from: { opacity: "0", left: "100%" },
+          to: { opacity: "1", left: "calc(100% - 460px)" },
+        },
+        "animate-opacity": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "search-input": "animate-search-input 1.2s linear  forwards",
+        "search-input-mobile": "animate-search-input-mobile 0.1s linear  forwards",
+        opacity: "animate-opacity 1s ease-out forwards",
+        "cart-view": "animate-cart-view 0.3s linear forwards",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
+} satisfies Config;
 
-export default config
+export default config;

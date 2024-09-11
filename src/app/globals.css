@@ -67,3 +67,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+html *::-webkit-scrollbar {
+  border-radius: 0;
+  width: 4px;
+}
+html *::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(22, 24, 35, 0.06);
+}
+html *::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
+html *::-webkit-scrollbar-track {
+  position: fixed;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+::-webkit-scrollbar {
+  height: 4px; /* Thay đổi chiều cao của thanh cuộn ngang */
+}
+
+.customScrollbar::-webkit-scrollbar {
+  width: 12px !important; /* Độ rộng của scrollbar */
+  height: 12px !important; /* Độ cao của scrollbar */
+}
+.customScrollbar::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #707072;
+}
