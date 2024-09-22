@@ -166,7 +166,16 @@ function CategoryClient({ listProductInit, listSize, listColor, limitServer, val
             !isShowFilter ? "w-0 opacity-0" : "w-[17%] mr-16"
           } transition-all  duration-300  `}
         >
-          <button className="text-end my-1 mb-4 hover:opacity-70">
+          <button
+            className="text-end my-1 mb-4 hover:opacity-70"
+            onClick={() =>
+              setFilter({
+                colorId: undefined,
+                sizeId: undefined,
+                sortBy: "",
+              })
+            }
+          >
             Clear Filters ({Object.values(filter).filter((item) => item).length})
           </button>
           <Filter filter={filter} setFilter={setFilter} data={listSize} valueKey="sizeId" name="Sizes" />

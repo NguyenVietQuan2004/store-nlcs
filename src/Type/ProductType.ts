@@ -9,6 +9,7 @@ export const Product = z.object({
   _id: z.string(),
   images: z.array(z.string()),
   name: z.string(),
+  sale: z.number(),
   storeId: z.string(),
   arrayPrice: z.array(
     z.object({
@@ -94,10 +95,13 @@ export const CreateProductBody = z.object({
   images: z.array(z.string()),
   name: z.string(),
   storeId: z.string(),
+  sale: z.number(),
   arrayPrice: z.array(
     z.object({
       size: z.string(),
       price: z.number(),
+      amount: z.number(),
+      amount_sold: z.number(),
       colors: z.array(z.string()),
     })
   ),
@@ -127,6 +131,7 @@ export const UpdateProductBody = z.object({
       size: z.string(),
       price: z.number(),
       colors: z.array(z.string()),
+      amount: z.number(),
     })
   ),
   categoryId: z.string(),

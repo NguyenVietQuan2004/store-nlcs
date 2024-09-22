@@ -35,11 +35,8 @@ function CartClientNotSuspen() {
 
   // coi lại chỗ này
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
     if (isMounted === true) fetchAPI();
+    setIsMounted(true);
   }, [isMounted]);
 
   const handleRemoveItem = (item: productOrderType) => {
@@ -48,27 +45,65 @@ function CartClientNotSuspen() {
   const handleUpdateSizeItem = (item: productOrderType) => {
     onOpen(item);
   };
+  // const handleCheckout = async () => {
+  //   const filterItemsOutOfStock = items.filter((item) => item.amount !== 0);
+  //   if (!filterItemsOutOfStock.length) return;
+  //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_ADMIN}/checkout`, {
+  //     method: "POST",
+  //     body: JSON.stringify(filterItemsOutOfStock),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   const data = await response.json();
+  //   console.log(data);
+  //   if (data.statusCode === 401) {
+  //     toast({
+  //       title: data.message || "",
+  //       variant: "destructiveCustom",
+  //     });
+  //     fetchAPI();
+  //     return;
+  //   }
+  //   window.location = data.url;
+  // };
+
   const handleCheckout = async () => {
     const filterItemsOutOfStock = items.filter((item) => item.amount !== 0);
     if (!filterItemsOutOfStock.length) return;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_ADMIN}/checkout`, {
-      method: "POST",
-      body: JSON.stringify(filterItemsOutOfStock),
-      headers: {
-        "Content-Type": "application/json",
-      },
+
+    // Giả lập 3 người dùng đặt hàng cùng lúc bằng cách gọi 3 lần fetch song song
+    const fetchRequests = Array(3)
+      .fill(null)
+      .map(() =>
+        fetch(`${process.env.NEXT_PUBLIC_API_ADMIN}/checkout`, {
+          method: "POST",
+          body: JSON.stringify(filterItemsOutOfStock),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      );
+
+    //   // Chạy tất cả các lệnh fetch song song
+    const responses = await Promise.all(fetchRequests);
+
+    const data = await Promise.all(responses.map((res) => res.json()));
+
+    // Xử lý kết quả cho từng response
+    data.forEach((response) => {
+      if (response.statusCode === 401) {
+        toast({
+          title: response.message || "",
+          variant: "destructiveCustom",
+        });
+        fetchAPI(); // Reload hoặc fetch lại dữ liệu
+        return;
+      }
+      window.location = response.url;
     });
-    const data = await response.json();
-    if (data.statusCode === 401) {
-      toast({
-        title: data.message || "",
-        variant: "destructiveCustom",
-      });
-      fetchAPI();
-      return;
-    }
-    window.location = data.url;
   };
+
   useEffect(() => {
     if (searchParams.get("success")) {
       toast({
@@ -98,11 +133,13 @@ function CartClientNotSuspen() {
   };
   if (!isMounted) return null;
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 px-2  lg:px-[100px] xl:px-[200px]">
+    <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 px-2   xl:px-[100px] ">
       <div className="lg:col-span-4 max-w-full overflow-hidden  ">
         {items.map((item) => {
           const objectPrice = item.product.arrayPrice.find((objectPrice: any) => objectPrice.size === item.size);
-          totalPrice += (objectPrice?.price || 0) * item.amount || 0;
+          // totalPrice += (objectPrice?.price || 0) * item.amount || 0;
+          totalPrice +=
+            ((objectPrice?.price || 0) * item.amount * (item.product.sale ? 100 - item.product.sale : 1)) / 100;
 
           //  chỉ hiện tối đa 10 select quantity
           const arraySelect =
@@ -123,7 +160,12 @@ function CartClientNotSuspen() {
                   <div className="flex-1 col-span-2 text-[#707072] flex flex-col justify-between">
                     <div className="leading-[28px] ">
                       <div className=" lg:hidden font-medium  col-span-2 self-start ">
-                        {formattedPrice(objectPrice?.price || 0)}
+                        {formattedPrice(
+                          ((objectPrice?.price || 0) *
+                            item.amount *
+                            (item.product.sale ? 100 - item.product.sale : 1)) /
+                            100
+                        )}
                       </div>
                       <div
                         className={`  font-semibold text-[#111111] line-clamp-2 ${
@@ -193,8 +235,14 @@ function CartClientNotSuspen() {
                     </div>
                   </div>
                 </div>
-                <div className="hidden lg:block font-medium  col-span-2 self-start ">
-                  {formattedPrice(objectPrice?.price || 0)}
+                <div className="hidden lg:flex font-medium  flex-col col-span-2 self-start ">
+                  <span className="text-sm text-[#707072]">{formattedPrice(objectPrice?.price || 0)} for one</span>
+                  <span>
+                    {formattedPrice(
+                      ((objectPrice?.price || 0) * item.amount * (item.product.sale ? 100 - item.product.sale : 1)) /
+                        100
+                    )}
+                  </span>
                 </div>
               </div>
               <Separator className="my-6" />
@@ -231,7 +279,6 @@ function CartClientNotSuspen() {
 
 function CartClient() {
   const { itemsFavourite } = useFavourite();
-  const { items, removeItem, onUpdateAmount, onUpdateWhenMounted } = useCart();
 
   return (
     <Suspense fallback={<div>loading.....</div>}>

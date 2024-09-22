@@ -38,9 +38,11 @@ export function Combobox({ setFilter, filter }: { setFilter: React.Dispatch<Reac
           aria-expanded={open}
           className="mt-2 lg:mt-0 w-full lg:w-[200px] justify-between"
         >
-          {filter.sortBy
-            ? valueFilters.find((framework) => framework.value === filter.sortBy)?.label
-            : "Select filters..."}
+          {filter.sortBy ? (
+            valueFilters.find((framework) => framework.value === filter.sortBy)?.label
+          ) : (
+            <span className="text-sm text-[#707072] font-light">Select filters...</span>
+          )}
           <ChevronsUpDown className="ml-2  h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

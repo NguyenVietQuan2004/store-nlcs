@@ -1,19 +1,27 @@
 import Image from "next/image";
 import { ListProductResType } from "@/Type/ProductType";
+import { compareDay } from "@/lib/utils";
 
 interface Card2Props {
   listProduct: ListProductResType["data"]["listProduct"] | undefined;
 }
-function Card2({ listProduct }: Card2Props) {
+async function Card2({ listProduct }: Card2Props) {
+  let countNewProduct = 0;
+
+  listProduct?.forEach((val) => {
+    if (compareDay(val.createdAt)) {
+      countNewProduct++;
+    }
+  });
   return (
     <div className="flex flex-col">
       <div className="flex justify-center ">
         <h3 className="text-2xl font-semibold">New arrivals</h3>
       </div>
       <div className="p-5 bg-white rounded-2xl my-2 lg:my-6">
-        <h4 className="text-xl font-medium mb-4">{listProduct?.length}+ products added today</h4>
+        <h4 className="text-xl font-medium mb-4">{countNewProduct}+ products added today</h4>
         <div className="grid grid-cols-2 gap-4">
-          {listProduct?.slice(14, 18).map((product) => (
+          {listProduct?.slice(0, 4).map((product) => (
             <div key={product._id}>
               <Image
                 alt=""
@@ -30,7 +38,7 @@ function Card2({ listProduct }: Card2Props) {
         <div className=" w-[132px] h-[132px] flex items-center">
           <Image
             alt=""
-            src={listProduct?.[5].images[0] || ""}
+            src={listProduct?.[4]?.images[0] || ""}
             width={500}
             height={500}
             className="rounded-xl w-full aspect-square  object-cover select-none"

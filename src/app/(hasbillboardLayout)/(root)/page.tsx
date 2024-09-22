@@ -32,7 +32,7 @@ const text = [
 ];
 export default async function Home() {
   let response: ListProductResType | null = null;
-  let ImagesHomePage: ImagesHomePageResType | null = null;
+  let data: ImagesHomePageResType | null = null;
 
   try {
     response = await productAPI.getListProduct({
@@ -40,14 +40,14 @@ export default async function Home() {
       limit: 100,
       sortBy: "feature",
     });
-    ImagesHomePage = await ImagesHomePageAPI.getImagesHomePage();
+    data = await ImagesHomePageAPI.getImagesHomePageAndDiscover();
   } catch (error) {
     handlError({ consoleError: "GET_LIST_PRODUCT_OF_STORE_API_ERROR", error });
   }
   return (
     <div>
       <div className="flex lg:grid grid-cols-3 gap-x-2 mt-2 overflow-auto">
-        {ImagesHomePage?.data.billboardFeature.map((value, index) => (
+        {data?.data.ImagesHomePage.billboardFeature.map((value, index) => (
           <Link
             href={response?.data.listProduct?.[0].categoryId._id || ""}
             className="overflow-hidden relative min-w-[310px] "
@@ -76,17 +76,13 @@ export default async function Home() {
       {!response || !response?.data?.listProduct?.length ? (
         <div className="text-center my-4 px-20">No results found</div>
       ) : (
-        <Suspense
-          fallback={
-            <div>loadingggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg</div>
-          }
-        >
+        <Suspense fallback={<div>loading...</div>}>
           <ProductFeature listProduct={response?.data.listProduct} />
         </Suspense>
       )}
-      <Insurance backgroundInsurance={ImagesHomePage?.data.backgroundInsurance} />
-      <Discover listProduct={response?.data.listProduct} />
-      <Banner billboardBST={ImagesHomePage?.data.billboardBST} />
+      <Insurance backgroundInsurance={data?.data.ImagesHomePage.backgroundInsurance} />
+      <Discover data={data} />
+      <Banner billboardBST={data?.data.ImagesHomePage.billboardBST} />
     </div>
   );
 }

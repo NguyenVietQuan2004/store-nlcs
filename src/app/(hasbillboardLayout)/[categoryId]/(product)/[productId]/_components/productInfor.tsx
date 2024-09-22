@@ -112,7 +112,11 @@ function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
         <div className=" text-[#28a745] font-light mt-4">{objectPriceNotEmptyAmount.amount > 0 && "(còn hàng)"}</div>
         <Separator className="mt-1 mb-5" />
         <CodeStar maxAmount={currentSize.maxAmount!} />
-        <div className="mb-3 font-semibold">{formattedPrice(currentSize.price)}</div>
+        {/* <div className="mb-3 font-semibold">{formattedPrice(currentSize.price)}</div> */}
+        <div className="mb-3 font-semibold">
+          <span className="text-[#b1b1b3] text-sm line-through mr-4"> {formattedPrice(currentSize.price)} </span>
+          {product.sale && formattedPrice((currentSize.price * (100 - product.sale)) / 100)}
+        </div>
         <Sizes setCurrentSize={setCurrentSize} currentSize={currentSize} arrayPrice={product.arrayPrice} />
         <Amount currentSize={currentSize} setCurrentSize={setCurrentSize} />
 

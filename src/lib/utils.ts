@@ -45,3 +45,19 @@ export const createArrayByOrder = (length: number) => {
   }
   return array;
 };
+
+export const compareDay = (dateString: string) => {
+  const dateToCompare = new Date(dateString);
+  const currentDate = new Date();
+
+  const yearToCompare = dateToCompare.getUTCFullYear();
+  const monthToCompare = dateToCompare.getUTCMonth() + 1;
+  const dayToCompare = dateToCompare.getUTCDate();
+
+  const yearNow = currentDate.getUTCFullYear();
+  const monthNow = currentDate.getUTCMonth() + 1;
+  const dayNow = currentDate.getUTCDate();
+
+  // So sánh
+  return yearToCompare === yearNow && monthToCompare === monthNow && dayToCompare === dayNow;
+};

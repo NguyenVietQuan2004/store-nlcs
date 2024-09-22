@@ -25,6 +25,8 @@ function Sizes({ arrayPrice, currentSize, setCurrentSize }: SizeProps) {
       price: objectPrice.price,
       colors: objectPrice.colors,
       maxAmount: objectPrice.amount,
+      currentAmount:
+        (currentSize?.currentAmount || 0) > objectPrice.amount ? objectPrice.amount : currentSize.currentAmount,
       colorUserSelect: objectPrice.colors[0],
     });
   };

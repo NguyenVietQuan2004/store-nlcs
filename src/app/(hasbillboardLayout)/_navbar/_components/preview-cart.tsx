@@ -18,7 +18,7 @@ function PreviewCard() {
     removeItem(item);
   };
 
-  let totalPrice = 0;
+  let totalPrice: number = 0;
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const [isShowCartView, setIsShowCartView] = useState(false);
@@ -73,7 +73,9 @@ function PreviewCard() {
             <div className="flex flex-col flex-1  lg:h-[490px]   overflow-auto pt-4 pb-6 ">
               {items.map((item, index) => {
                 const objectPrice = item.product.arrayPrice.find((objectPrice) => objectPrice.size === item.size);
-                totalPrice += (objectPrice?.price || 0) * item.amount;
+                totalPrice +=
+                  ((objectPrice?.price || 0) * item.amount * (item.product.sale ? 100 - item.product.sale : 1)) / 100;
+
                 return (
                   <Fragment key={item.product._id + item.size}>
                     {index !== 0 && <Separator />}
@@ -90,7 +92,14 @@ function PreviewCard() {
                           <div className="  max-w-[250px] break-words line-clamp-2 leading-[20px] overflow-hidden    font-medium text-[#111111] ">
                             {item.product.name}
                           </div>
-                          <div className="font-medium">{formattedPrice((objectPrice?.price || 0) * item.amount)}</div>
+                          <div className="font-medium">
+                            {formattedPrice(
+                              ((objectPrice?.price || 0) *
+                                item.amount *
+                                (item.product.sale ? 100 - item.product.sale : 1)) /
+                                100
+                            )}
+                          </div>
                         </div>
                         <div className="flex justify-between mt-auto">
                           <div className="text-[#707072] text-sm font-medium">QTY: {item.amount}</div>
