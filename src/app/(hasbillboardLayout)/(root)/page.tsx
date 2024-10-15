@@ -12,6 +12,7 @@ import { ImagesHomePageAPI } from "@/apiRequest/imagesHomePageAPI";
 import Discover from "@/app/(hasbillboardLayout)/(root)/_components/discover";
 import Insurance from "@/app/(hasbillboardLayout)/(root)/_components/insurance";
 import ProductFeature from "@/app/(hasbillboardLayout)/(root)/_components/products-feature";
+import Chat from "./_components/chat";
 
 const text = [
   {
@@ -83,6 +84,7 @@ export default async function Home() {
       <Insurance backgroundInsurance={data?.data.ImagesHomePage.backgroundInsurance} />
       <Discover data={data} />
       <Banner billboardBST={data?.data.ImagesHomePage.billboardBST} />
+      <Chat />
     </div>
   );
 }
