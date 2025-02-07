@@ -56,6 +56,7 @@ function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
       size: currentSize.size,
       color: currentSize.colorUserSelect,
       amount: currentSize.currentAmount!,
+      snapshotPrice: product.arrayPrice.find((item) => item.size === currentSize.size)?.price || 0,
     });
   };
   const handleAddtoFavourite = () => {

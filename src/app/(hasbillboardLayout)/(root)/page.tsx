@@ -48,7 +48,7 @@ export default async function Home() {
   return (
     <div>
       <div className="flex lg:grid grid-cols-3 gap-x-2 mt-2 overflow-auto">
-        {data?.data.ImagesHomePage.billboardFeature.map((value, index) => (
+        {data?.data?.ImagesHomePage.billboardFeature.map((value, index) => (
           <Link
             href={response?.data.listProduct?.[0].categoryId._id || ""}
             className="overflow-hidden relative min-w-[310px] "
@@ -81,9 +81,9 @@ export default async function Home() {
           <ProductFeature listProduct={response?.data.listProduct} />
         </Suspense>
       )}
-      <Insurance backgroundInsurance={data?.data.ImagesHomePage.backgroundInsurance} />
+      <Insurance backgroundInsurance={data?.data?.ImagesHomePage.backgroundInsurance} />
       <Discover data={data} />
-      <Banner billboardBST={data?.data.ImagesHomePage.billboardBST} />
+      <Banner billboardBST={data?.data?.ImagesHomePage.billboardBST} />
       <Chat />
     </div>
   );

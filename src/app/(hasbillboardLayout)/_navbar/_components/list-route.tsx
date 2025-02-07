@@ -22,7 +22,7 @@ function ListRoute({ listCategory }: ListRouteProps) {
   const listBillboard = listCategory?.map((category) => category.billboardId);
 
   // Label Billboard truyền vào sẽ gồm 3 câu phân cách bởi dấu .
-  const labelSplit = currentCategory?.billboardId.label.split(".") || listCategory?.[0].billboardId.label.split(".");
+  const labelSplit = currentCategory?.billboardId.label.split(".") || listCategory?.[0]?.billboardId.label.split(".");
   return (
     <>
       <div className=" px-5 lg:px-10 py-3  border-b   fixed inset-x-0 top-0 bg-white/75 backdrop-blur-lg z-20">
