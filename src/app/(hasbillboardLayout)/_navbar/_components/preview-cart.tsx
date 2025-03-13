@@ -72,12 +72,16 @@ function PreviewCard() {
             </div>
             <div className="flex flex-col flex-1  lg:h-[490px]   overflow-auto pt-4 pb-6 ">
               {items.map((item, index) => {
-                const objectPrice = item.product.arrayPrice.find((objectPrice) => objectPrice.size === item.size);
+                const objectPrice = item.product.product_variants.find(
+                  (objectPrice) => objectPrice._id === item.product_variant_id
+                );
                 totalPrice +=
-                  ((objectPrice?.price || 0) * item.amount * (item.product.sale ? 100 - item.product.sale : 1)) / 100;
+                  (objectPrice?.price || 0) *
+                  item.quantity *
+                  (item.product.sales ? (100 - item.product.sales) / 100 : 1);
 
                 return (
-                  <Fragment key={item.product._id + item.size}>
+                  <Fragment key={item.product._id + item.product_variant_id}>
                     {index !== 0 && <Separator />}
                     <div className="py-3 flex">
                       <Image
@@ -94,15 +98,14 @@ function PreviewCard() {
                           </div>
                           <div className="font-medium">
                             {formattedPrice(
-                              ((objectPrice?.price || 0) *
-                                item.amount *
-                                (item.product.sale ? 100 - item.product.sale : 1)) /
-                                100
+                              (objectPrice?.price || 0) *
+                                item.quantity *
+                                (item.product.sales ? (100 - item.product.sales) / 100 : 1)
                             )}
                           </div>
                         </div>
                         <div className="flex justify-between mt-auto">
-                          <div className="text-[#707072] text-sm font-medium">QTY: {item.amount}</div>
+                          <div className="text-[#707072] text-sm font-medium">QTY: {item.quantity}</div>
                           <button onClick={() => handleDeleteCart(item)} className="text-sm font-medium">
                             Remove
                           </button>

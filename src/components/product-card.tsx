@@ -9,30 +9,32 @@ import { ProductType } from "@/Type/ProductType";
 import IconButton from "@/components/icon-button";
 import { OverViewIcon } from "../../public/icons";
 import { useModalPreview } from "@/hooks/use-modal-preview";
+import { object } from "zod";
 
 interface ProductCardProps {
   product: ProductType;
 }
 
 function ProductCard({ product }: ProductCardProps) {
-  const price = product.arrayPrice[0].price;
+  const price = product.product_variants[0].price;
   const { onOpen } = useModalPreview();
   const onPreview: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     onOpen(product);
   };
 
-  const totalColors = Array.from(new Set(product.arrayPrice.flatMap((objectPrice) => objectPrice.colors)));
+  const totalColors = 2;
   return (
     <Link
       key={product._id}
-      href={`/${product.categoryId._id}/${product._id}`}
+      href={`/${product.category._id}/${product._id}`}
       className="group   rounded-lg cursor-pointer  flex flex-col select-none shadow-lg"
     >
       <div className="relative">
         <Image
+          priority
           alt=""
-          src={product.images[0]}
+          src={product?.images[0]}
           width={400}
           height={400}
           className="w-full aspect-square rounded-sm object-cover select-none"
@@ -47,16 +49,18 @@ function ProductCard({ product }: ProductCardProps) {
       </div>
       <div className="flex  flex-col justify-between h-full p-4">
         <div className="text-sm  font-light flex items-center justify-between ">
-          <span>
-            +{totalColors.length} Color{totalColors.length > 1 && "s"}{" "}
-          </span>
-          <span>
-            +{product.arrayPrice.length} size{product.arrayPrice.length > 1 && "s"}
-          </span>
+          {product?.variants.map((variant, index) => {
+            if (index > 1) return null;
+            return (
+              <span key={variant.name} className="">
+                +{variant.values.length} {variant.name}
+              </span>
+            );
+          })}
         </div>
         <div className="text-[rgb(87, 88, 90)] mt-2 text-sm line-clamp-2 font-normal min-h-10"> {product.name} </div>
         <div>
-          <div className="text-sm text-[#707072] font-semibold my-1"> {product.categoryId.name} </div>
+          <div className="text-sm text-[#707072] font-semibold my-1"> {product.category.name} </div>
 
           <div className="mt-3 font-medium">{formattedPrice(price)}</div>
         </div>

@@ -5,32 +5,51 @@ import { Color } from "@/Type/ColorType";
 import { Size } from "@/Type/SizeTypes";
 import { Category } from "@/Type/CategoryTypes";
 
+const ProductVariantSchema = z.object({
+  product_id: z.string(),
+  _id: z.string(),
+  sku: z.string().min(1),
+  price: z.number().min(0),
+  stock: z.number().default(0),
+  sold: z.number().default(0),
+  variant_values: z.record(z.string(), z.string()),
+});
+const CategorySchema = z.object({
+  name: z.string().min(1),
+  store_id: z.string(),
+  attributes: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        values: z.array(z.string()).default([]),
+      })
+    )
+    .default([]),
+});
+
 export const Product = z.object({
   _id: z.string(),
-  images: z.array(z.string()),
-  name: z.string(),
-  sale: z.number(),
-  storeId: z.string(),
-  arrayPrice: z.array(
-    z.object({
-      size: z.string(),
-      price: z.number(),
-      colors: z.array(z.string()),
-      amount: z.number(),
-    })
-  ),
-  categoryId: z.object({
-    _id: z.string(),
-    name: z.string(),
-    storeId: z.string(),
-    billboardId: z.string(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }),
-  isFeature: z.boolean(),
-  isArchive: z.boolean(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  name: z.string().min(1),
+  search_keywords: z.array(z.string()).default([]),
+  description: z.string().optional(),
+  store_id: z.string(),
+  category_id: z.string(),
+  category: Category,
+  is_featured: z.boolean().default(false),
+  is_archived: z.boolean().default(false),
+  images: z.array(z.string()).default([]),
+  sales: z.number().default(0),
+  variants: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        values: z.array(z.string().min(1)),
+      })
+    )
+    .default([]),
+  product_variants: z.array(ProductVariantSchema),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
 
 //  PRODUCT BODY TYPE -- chỗ này khác với client
@@ -44,8 +63,6 @@ export type ProductBodyType = z.TypeOf<typeof ProductBody>;
 export const ProductRes = z.object({
   data: z.object({
     product: Product,
-    listColor: z.array(Color),
-    listSize: z.array(Size),
     listCategory: z.array(Category),
     productsRelative: z.array(Product),
   }),
@@ -61,10 +78,9 @@ export type ProductType = z.TypeOf<typeof Product>;
 
 // LIST PRODUCT BODY TYPE -- khác với client
 export const ListProductBody = z.object({
-  categoryId: z.string().optional(),
-  colorId: z.string().optional(),
-  sizeId: z.string().optional(),
+  category_id: z.string().optional(),
   page: z.number(),
+  variants: z.array(z.any()),
   limit: z.number(),
   sortBy: z.string().optional(),
   value: z.string().optional(),
@@ -81,8 +97,6 @@ export const ListProductRes = z.object({
   data: z.object({
     listProduct: z.array(Product),
     totalProduct: z.number(),
-    listColor: z.array(Color),
-    listSize: z.array(Size),
   }),
   message: z.string(),
   ok: z.boolean(),
@@ -94,8 +108,8 @@ export type ListProductResType = z.TypeOf<typeof ListProductRes>;
 export const CreateProductBody = z.object({
   images: z.array(z.string()),
   name: z.string(),
-  storeId: z.string(),
-  sale: z.number(),
+  store_id: z.string(),
+  sales: z.number(),
   arrayPrice: z.array(
     z.object({
       size: z.string(),
@@ -125,7 +139,7 @@ export const UpdateProductBody = z.object({
   _id: z.string(),
   images: z.array(z.string()),
   name: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   arrayPrice: z.array(
     z.object({
       size: z.string(),
@@ -152,7 +166,7 @@ export type UpdateProductResType = z.TypeOf<typeof UpdateProductRes>;
 /// DELETE PRODUCT BODY TYPE
 export const DeleteProductBody = z.object({
   _id: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type DeleteProductBodyType = z.TypeOf<typeof DeleteProductBody>;
 

@@ -7,9 +7,9 @@ import { Product } from "@/Type/ProductType";
 const Order = z.object({
   _id: z.string(),
   phone: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   address: z.string(),
-  isPaid: z.boolean(),
+  is_paid: z.boolean(),
   paid_at: z.date(),
   listProductOrder: z.array(
     z.object({
@@ -17,7 +17,7 @@ const Order = z.object({
       size: z.string(),
       color: z.string(),
       amount: z.number(),
-      snapshotPrice: z.number(),
+      snapshot_price: z.number(),
     })
   ),
   createdAt: z.string(),
@@ -28,7 +28,7 @@ const Order = z.object({
 export const OrderBody = z.object({
   _id: z.string(),
   sessionToken: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type OrderBodyType = z.TypeOf<typeof OrderBody>;
 
@@ -46,7 +46,7 @@ export type OrderType = z.TypeOf<typeof Order>;
 
 // LIST ORDER BODY TYPE
 export const ListOrderBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   sessionToken: z.string(),
 });
 export type ListOrderBodyType = z.TypeOf<typeof ListOrderBody>;
@@ -63,10 +63,10 @@ export type ListOrderResType = z.TypeOf<typeof ListOrderRes>;
 //  CREATE ORDER BODY TYPE
 ///////////////////////////////////////// casi nayf chua chinh
 export const CreateOrderBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   phone: z.string(),
   address: z.string(),
-  isPaid: z.boolean(),
+  is_paid: z.boolean(),
   listProductOrder: z.array(z.string()),
 });
 export type CreateOrderBodyType = z.TypeOf<typeof CreateOrderBody>;
@@ -83,7 +83,7 @@ export type CreateOrderResType = z.TypeOf<typeof CreateOrderRes>;
 // DELETE ORDER BODY TYPE
 export const DeleteOrderBody = z.object({
   _id: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type DeleteOrderBodyType = z.TypeOf<typeof DeleteOrderBody>;
 
@@ -100,7 +100,7 @@ export type DeleteOrderResType = z.TypeOf<typeof DeleteOrderRes>;
 
 export const OverviewBody = z.object({
   sessionToken: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type OverviewBodyType = z.TypeOf<typeof OverviewBody>;
 
@@ -118,10 +118,9 @@ export type OverviewResType = z.TypeOf<typeof OverviewRes>;
 
 export const productOrder = z.object({
   product: Product,
-  size: z.string(),
-  color: z.string(),
-  amount: z.number(),
-  snapshotPrice: z.number(),
+  product_variant_id: z.string(),
+  quantity: z.number(),
+  snapshot_price: z.number(),
 });
 export type productOrderType = z.TypeOf<typeof productOrder>;
 

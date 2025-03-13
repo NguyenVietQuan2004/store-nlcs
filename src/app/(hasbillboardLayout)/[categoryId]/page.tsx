@@ -9,21 +9,17 @@ async function CategoryId({ params }: { params: { categoryId: string } }) {
 
   try {
     listProduct = await productAPI.getListProduct({
-      categoryId: params.categoryId,
+      category_id: params.categoryId,
       page: 1,
       limit: limitServer,
+      variants: [],
     });
   } catch (error) {
     handlError({ consoleError: "GET_LIST_PRODUCT_SIZES_COLORS_API_ERROR", error });
   }
   return (
     <div className="px-2 lg:px-10 mx-auto">
-      <CategoryClient
-        limitServer={limitServer}
-        listProductInit={listProduct}
-        listSize={listProduct?.data.listSize}
-        listColor={listProduct?.data.listColor}
-      />
+      <CategoryClient limitServer={limitServer} listProductInit={listProduct} />
     </div>
   );
 }

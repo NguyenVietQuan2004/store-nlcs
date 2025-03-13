@@ -10,7 +10,7 @@ import {
 export const productAPI = {
   getListProduct(body?: ListProductBodyType) {
     return httpRequest.get<ListProductResType>(
-      `${process.env.NEXT_PUBLIC_API_ADMIN}/products?categoryId=${body?.categoryId}&value=${body?.value}&sizeId=${body?.sizeId}&colorId=${body?.colorId}&sortBy=${body?.sortBy}&limit=${body?.limit}&page=${body?.page}`,
+      `${process.env.NEXT_PUBLIC_API_ADMIN}/products?category_id=${body?.category_id}&value=${body?.value}&variants=${body?.variants}&sortBy=${body?.sortBy}&limit=${body?.limit}&page=${body?.page}`,
       {
         cache: "no-cache",
       }

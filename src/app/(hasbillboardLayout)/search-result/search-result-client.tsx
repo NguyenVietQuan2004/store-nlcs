@@ -20,6 +20,7 @@ function SearchResultClient() {
           page: 1,
           limit: 100,
           value: searchParams.get("value") || "",
+          variants: [],
         });
         setListProduct(data);
         router.refresh();
@@ -34,8 +35,6 @@ function SearchResultClient() {
     <div>
       {listProduct && (
         <CategoryClient
-          listSize={listProduct.data.listSize}
-          listColor={listProduct.data.listColor}
           limitServer={limitServer}
           listProductInit={listProduct}
           value={searchParams.get("value") || undefined}

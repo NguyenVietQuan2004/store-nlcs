@@ -15,7 +15,8 @@ interface FilterProps {
   valueKey: string;
   autoShow?: boolean;
   setFilter: React.Dispatch<SetStateAction<any>>;
-  data: ListSizeResType["data"] | ListColorResType["data"] | undefined;
+  // data: ListSizeResType["data"] | ListColorResType["data"] | undefined;
+  data: string[];
 }
 
 function Filter({ data, name, valueKey, setFilter, filter, autoShow = false }: FilterProps) {
@@ -44,13 +45,13 @@ function Filter({ data, name, valueKey, setFilter, filter, autoShow = false }: F
           <div className="flex flex-wrap gap-2 mb-2">
             {data?.map((item) => (
               <Button
-                key={item.name}
-                onClick={() => handleOnclick(item._id)}
+                key={item}
+                onClick={() => handleOnclick(item)}
                 variant="outline"
                 size={"sm"}
-                className={`${(filter.sizeId === item._id || filter.colorId === item._id) && "bg-black text-white "}`}
+                className={`${filter[name] === item && "bg-black text-white "}`}
               >
-                {item.name}
+                {item}
               </Button>
             ))}
           </div>

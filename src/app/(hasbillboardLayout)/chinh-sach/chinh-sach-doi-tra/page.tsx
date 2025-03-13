@@ -53,8 +53,8 @@ function ChinhSachDoiTra() {
           <span className="font-bold">- Số lần đổi trả cho 1 sản phẩm là 1 lần</span>
         </p>
         <p className="italic">
-          - Các sản phẩm không được đổi trả: Sản phẩm sale 40% trở lên, sản phẩm đồng giá, sản phẩm đã hết thời gian đổi
-          trả và các sản phẩm không do lỗi của nhà vận chuyển và không do lỗi của nhà sản xuất.
+          - Các sản phẩm không được đổi trả: Sản phẩm sales 40% trở lên, sản phẩm đồng giá, sản phẩm đã hết thời gian
+          đổi trả và các sản phẩm không do lỗi của nhà vận chuyển và không do lỗi của nhà sản xuất.
         </p>
       </div>
 

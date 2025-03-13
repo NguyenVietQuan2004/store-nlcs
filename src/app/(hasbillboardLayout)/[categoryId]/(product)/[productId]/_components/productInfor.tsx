@@ -12,7 +12,6 @@ import { useFavourite } from "@/hooks/useFavourite";
 import { Separator } from "@/components/ui/separator";
 import { HeartIcon, StarIcon } from "../../../../../../../public/icons";
 import Sizes from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/sizes";
-import Colors from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/colors";
 import Amount from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/amount";
 import CodeStar from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/code-star";
 import ChinhSach from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/chinh-sach";
@@ -23,29 +22,39 @@ interface ProductInforProps {
   isShowChinhSach?: boolean;
 }
 export interface currentSizeProps {
-  size: string;
   price: number;
-  colors: Array<string>;
-  colorUserSelect: string;
   imagesUserSelect?: string;
   currentAmount?: number;
   maxAmount?: number;
+  skus: string[];
+  skuUserSelect: string;
 }
 function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
-  const objectPriceNotEmptyAmount =
-    product.arrayPrice.find((objectPrice) => objectPrice.amount !== 0) || product.arrayPrice[0];
+  const objectPriceNotEmptyAmount = product?.product_variants?.find((item) => item.stock > 0);
 
   // currentSize là giữ sự thay đổi của user chọn cái nào
-  const [currentSize, setCurrentSize] = useState<currentSizeProps>({
-    size: objectPriceNotEmptyAmount.size,
-    price: objectPriceNotEmptyAmount.price,
-    colors: objectPriceNotEmptyAmount.colors,
-    colorUserSelect: objectPriceNotEmptyAmount.colors[0],
-    imagesUserSelect: product.images[0],
-    currentAmount: 1,
-    maxAmount: objectPriceNotEmptyAmount.amount,
-  });
+  // const typeFilter = Object.assign(
+  //   {},
+  //   ...(product.category.attributes.map((attr) => ({
+  //     [attr.name]: undefined,
+  //   })) ?? [])
+  // );
 
+  // const typeFilterSelect = Object.assign(
+  //   {},
+  //   ...(product.category.attributes.map((attr) => ({
+  //     [`${attr.name}UserSelect`]: attr.values[0],
+  //   })) ?? [])
+  // );
+  const skus = product?.product_variants.map((item) => item.sku);
+  const [currentSize, setCurrentSize] = useState<currentSizeProps>({
+    price: objectPriceNotEmptyAmount?.price || 0,
+    skus: skus,
+    skuUserSelect: skus?.[0] || "",
+    imagesUserSelect: product?.images[0],
+    currentAmount: 1,
+    maxAmount: objectPriceNotEmptyAmount?.stock,
+  });
   const { addItem } = useCart();
   const { addItemFavourite } = useFavourite();
 
@@ -53,10 +62,13 @@ function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
     e.stopPropagation();
     addItem({
       product,
-      size: currentSize.size,
-      color: currentSize.colorUserSelect,
-      amount: currentSize.currentAmount!,
-      snapshotPrice: product.arrayPrice.find((item) => item.size === currentSize.size)?.price || 0,
+      product_variant_id: product.product_variants.find((item) => item.sku === currentSize.skuUserSelect)!._id,
+      quantity: currentSize.currentAmount || 0,
+      snapshot_price: currentSize.price,
+      //   size: currentSize.size,
+      //   color: currentSize.colorUserSelect,
+      //   amount: currentSize.currentAmount!,
+      //   snapshot_price: product.arrayPrice.find((item) => item.size === currentSize.size)?.price || 0,
     });
   };
   const handleAddtoFavourite = () => {
@@ -85,7 +97,7 @@ function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
           }}
         >
           <CarouselContent className="mt-4">
-            {product.images.map((image) => (
+            {product?.images.map((image) => (
               <CarouselItem key={image} className=" basis-1/4 pl-2">
                 <div
                   onMouseEnter={() => setCurrentSize({ ...currentSize, imagesUserSelect: image })}
@@ -109,19 +121,32 @@ function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
       </div>
 
       <div className="lg:col-span-4">
-        <h2 className="text-2xl font-bold">{product.name}</h2>
-        <div className=" text-[#28a745] font-light mt-4">{objectPriceNotEmptyAmount.amount > 0 && "(còn hàng)"}</div>
+        <h2 className="text-2xl font-bold">{product?.name}</h2>
+        <div className=" text-[#28a745] font-light mt-4">
+          {objectPriceNotEmptyAmount?.stock || (0 > 0 && "(còn hàng)")}
+        </div>
         <Separator className="mt-1 mb-5" />
-        <CodeStar maxAmount={currentSize.maxAmount!} />
+        <CodeStar maxAmount={currentSize.maxAmount!} id={product?._id} />
         {/* <div className="mb-3 font-semibold">{formattedPrice(currentSize.price)}</div> */}
         <div className="mb-3 font-semibold">
-          <span className="text-[#b1b1b3] text-sm line-through mr-4"> {formattedPrice(currentSize.price)} </span>
-          {product.sale && formattedPrice((currentSize.price * (100 - product.sale)) / 100)}
+          {product?.sales ? (
+            <>
+              <span className="text-[#b1b1b3] text-sm line-through mr-4"> {formattedPrice(currentSize.price)} </span>
+              {formattedPrice((currentSize.price * (100 - product.sales)) / 100)}
+            </>
+          ) : (
+            <span className=""> {formattedPrice(currentSize.price)} </span>
+          )}
         </div>
-        <Sizes setCurrentSize={setCurrentSize} currentSize={currentSize} arrayPrice={product.arrayPrice} />
+        <Sizes
+          setCurrentSize={setCurrentSize}
+          currentSize={currentSize}
+          variants={product?.variants}
+          product_variants={product?.product_variants}
+        />
         <Amount currentSize={currentSize} setCurrentSize={setCurrentSize} />
 
-        <Colors currentSize={currentSize} setCurrentSize={setCurrentSize} />
+        {/* <Colors currentSize={currentSize} setCurrentSize={setCurrentSize} /> */}
         <div className="mt-6 flex flex-wrap gap-4">
           <Button
             className=" rounded-tl-3xl rounded-br-3xl transition-all duration-300 border hover:bg-white hover:text-black border-black "
@@ -145,7 +170,7 @@ function ProductInfor({ product, isShowChinhSach = true }: ProductInforProps) {
         <Separator className="mt-8 mb-4" />
         <div>
           <span className="opacity-50 font-light ">Category:</span>{" "}
-          <span className="font-normal">{product.categoryId.name}</span>
+          <span className="font-normal">{product?.category?.name}</span>
         </div>
         {isShowChinhSach && <ChinhSach />}
       </div>

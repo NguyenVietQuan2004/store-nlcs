@@ -6,7 +6,7 @@ export const Billboard = z.object({
   _id: z.string(),
   label: z.string(),
   image: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -14,7 +14,7 @@ export const Billboard = z.object({
 export const BillboardBody = z.object({
   _id: z.string(),
   sessionToken: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type BillboardBodyType = z.TypeOf<typeof BillboardBody>;
 
@@ -32,7 +32,7 @@ export type BillboardType = z.TypeOf<typeof Billboard>;
 
 //  LIST BILLBOARD BODY TYPE
 export const ListBillboardBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   sessionToken: z.string(),
 });
 export type ListBillboardBodyType = z.TypeOf<typeof ListBillboardBody>;
@@ -50,7 +50,7 @@ export type ListBillboardResType = z.TypeOf<typeof ListBillboardRes>;
 export const CreateBillboardBody = z.object({
   label: z.string(),
   image: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type CreateBillboardBodyType = z.TypeOf<typeof CreateBillboardBody>;
 
@@ -65,7 +65,7 @@ export type CreateBillboardResType = z.TypeOf<typeof CreateBillboardRes>;
 
 // UPDATE BILLBOARD RES TYPE
 export const UpdateBillboardBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   _id: z.string(),
   label: z.string(),
   image: z.string(),
@@ -82,7 +82,7 @@ export type UpdateBillboardResType = z.TypeOf<typeof UpdateBillboardRes>;
 
 //  DELETE BILLBOARD BODY TYPE
 export const DeleteBillboardBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   _id: z.string(),
 });
 export type DeleteBillboardBodyType = z.TypeOf<typeof DeleteBillboardBody>;

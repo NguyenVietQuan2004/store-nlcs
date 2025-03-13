@@ -5,7 +5,7 @@ import z from "zod";
 export const Size = z.object({
   _id: z.string(),
   name: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   value: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -15,7 +15,7 @@ export const Size = z.object({
 export const SizeBody = z.object({
   _id: z.string(),
   sessionToken: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type SizeBodyType = z.TypeOf<typeof SizeBody>;
 
@@ -33,7 +33,7 @@ export type SizeType = z.TypeOf<typeof Size>;
 
 // LIST SIZE BODY TYPE
 export const ListSizeBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   sessionToken: z.string(),
 });
 export type ListSizeBodyType = z.TypeOf<typeof ListSizeBody>;
@@ -49,7 +49,7 @@ export type ListSizeResType = z.TypeOf<typeof ListSizeRes>;
 
 //  CREATE SIZE BODY TYPE
 export const CreateSizeBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   value: z.string(),
   name: z.string(),
 });
@@ -67,7 +67,7 @@ export type CreateSizeResType = z.TypeOf<typeof CreateSizeRes>;
 /// UPDATE SIZE BODY TYPE
 export const UpdateSizeBody = z.object({
   _id: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   value: z.string(),
   name: z.string(),
 });
@@ -85,7 +85,7 @@ export type UpdateSizeResType = z.TypeOf<typeof UpdateSizeRes>;
 /// DELETE SIZE BODY TYPE
 export const DeleteSizeBody = z.object({
   _id: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type DeleteSizeBodyType = z.TypeOf<typeof DeleteSizeBody>;
 

@@ -5,7 +5,7 @@ import z from "zod";
 export const Color = z.object({
   _id: z.string(),
   name: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   value: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -15,7 +15,7 @@ export const Color = z.object({
 export const ColorBody = z.object({
   _id: z.string(),
   sessionToken: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type ColorBodyType = z.TypeOf<typeof ColorBody>;
 
@@ -33,7 +33,7 @@ export type ColorType = z.TypeOf<typeof Color>;
 
 // LIST COLOR BODY TYPE
 export const ListColorBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   sessionToken: z.string(),
 });
 export type ListColorBodyType = z.TypeOf<typeof ListColorBody>;
@@ -49,7 +49,7 @@ export type ListColorResType = z.TypeOf<typeof ListColorRes>;
 
 //  CREATE COLOR BODY TYPE
 export const CreateColorBody = z.object({
-  storeId: z.string(),
+  store_id: z.string(),
   value: z.string(),
   name: z.string(),
 });
@@ -67,7 +67,7 @@ export type CreateColorResType = z.TypeOf<typeof CreateColorRes>;
 /// UPDATE COLOR BODY TYPE
 export const UpdateColorBody = z.object({
   _id: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
   value: z.string(),
   name: z.string(),
 });
@@ -85,7 +85,7 @@ export type UpdateColorResType = z.TypeOf<typeof UpdateColorRes>;
 /// DELETE COLOR BODY TYPE
 export const DeleteColorBody = z.object({
   _id: z.string(),
-  storeId: z.string(),
+  store_id: z.string(),
 });
 export type DeleteColorBodyType = z.TypeOf<typeof DeleteColorBody>;
 

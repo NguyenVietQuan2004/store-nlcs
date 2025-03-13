@@ -3,9 +3,9 @@ import { ListProductResType, ProductType } from "@/Type/ProductType";
 
 interface Card3Props {
   productBestSeller: ProductType | undefined;
-  productHighestSale: ProductType | undefined;
+  productHighestSales: ProductType | undefined;
 }
-function Card3({ productBestSeller, productHighestSale }: Card3Props) {
+function Card3({ productBestSeller, productHighestSales }: Card3Props) {
   return (
     <div className="flex flex-col">
       <div className="flex justify-end ">
@@ -15,7 +15,7 @@ function Card3({ productBestSeller, productHighestSale }: Card3Props) {
         <div className=" w-[132px] h-[132px] flex items-center">
           <Image
             alt=""
-            src={productHighestSale?.images[0] || ""}
+            src={productHighestSales?.images[0] || ""}
             width={1000}
             height={1000}
             className="rounded-xl w-full aspect-square  object-cover select-none"
@@ -25,7 +25,7 @@ function Card3({ productBestSeller, productHighestSale }: Card3Props) {
           <h4 className="text-lg text-[#707072]  font-medium">
             180-day
             <span className="text-[#222222] text-xl mx-1">Highest</span>
-            Sale
+            Sales
           </h4>
         </div>
       </div>
@@ -40,7 +40,7 @@ function Card3({ productBestSeller, productHighestSale }: Card3Props) {
             className="rounded-xl w-full aspect-square object-cover select-none"
           />
           <div className="text-sm absolute rounded-lg bg-white px-2 py-1 top-4 left-4">
-            {productBestSeller?.sale}% OFF
+            {productBestSeller?.sales}% OFF
           </div>
         </div>
       </div>

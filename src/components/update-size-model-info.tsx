@@ -8,7 +8,6 @@ import { formattedPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { productOrderType } from "@/Type/OrderTypes";
 import Sizes from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/sizes";
-import Colors from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/colors";
 import { currentSizeProps } from "@/app/(hasbillboardLayout)/[categoryId]/(product)/[productId]/_components/productInfor";
 
 interface UpdateSizeModalInfoProps {
@@ -17,24 +16,28 @@ interface UpdateSizeModalInfoProps {
 }
 
 function UpdateSizeModalInfo({ productOrder, onClose }: UpdateSizeModalInfoProps) {
-  const objectPrice = productOrder.product.arrayPrice.find((objectPrice) => objectPrice.size === productOrder.size)!;
+  const objectPrice = productOrder.product.product_variants.find(
+    (objectPrice) => objectPrice._id === productOrder.product_variant_id
+  )!;
+  const skus = productOrder.product.product_variants.map((item) => item.sku);
+  const sku = productOrder.product.product_variants.find((item) => item._id === productOrder.product_variant_id);
   const [currentSize, setCurrentSize] = useState<currentSizeProps>({
-    size: productOrder.size,
-    price: objectPrice.price,
-    colors: objectPrice.colors,
-    colorUserSelect: productOrder.color,
+    price: objectPrice?.price || 0,
+    skus: skus,
+    skuUserSelect: sku?.sku || skus[0],
   });
-  const { onUpdateSize } = useCart();
+  const { upUpdateProductVariant } = useCart();
   const handleUpdate = () => {
-    onUpdateSize({
+    upUpdateProductVariant({
       old: {
         productId: productOrder.product._id,
-        size: productOrder.size,
-        color: productOrder.color,
+        product_variant_id: productOrder.product_variant_id,
       },
       new: {
-        color: currentSize.colorUserSelect,
-        size: currentSize.size,
+        product_variant_id: productOrder.product.product_variants.find((item) => {
+          // console.log(item.sku, currentSize.skuUserSelect);
+          return item.sku === currentSize.skuUserSelect;
+        })?._id!,
       },
     });
     onClose();
@@ -53,17 +56,23 @@ function UpdateSizeModalInfo({ productOrder, onClose }: UpdateSizeModalInfoProps
       </div>
       <div className="flex justify-between flex-col">
         <div>
-          <div className="font-medium">{productOrder.product.categoryId.name}</div>
+          <div className="font-medium">{productOrder.product.category.name}</div>
           <div className="text-2xl font-semibold line-clamp-2 leading-[36px] my-1">{productOrder.product.name}</div>
-          <div className="font-medium">{formattedPrice(productOrder.product.arrayPrice[0].price)}</div>
+          <div className="font-medium">{formattedPrice(currentSize.price)}</div>
         </div>
         <div>
-          <Sizes
+          {/* <Sizes
             currentSize={currentSize}
             setCurrentSize={setCurrentSize}
             arrayPrice={productOrder.product.arrayPrice}
+          /> */}
+          <Sizes
+            setCurrentSize={setCurrentSize}
+            currentSize={currentSize}
+            variants={productOrder.product.variants}
+            product_variants={productOrder.product.product_variants}
           />
-          <Colors currentSize={currentSize} setCurrentSize={setCurrentSize} />
+          {/* <Colors currentSize={currentSize} setCurrentSize={setCurrentSize} /> */}
           <Button className="w-full" onClick={handleUpdate}>
             Update Size
           </Button>

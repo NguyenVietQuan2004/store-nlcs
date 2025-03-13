@@ -16,9 +16,9 @@ function ProductIdClient({ data }: ProductIdClientProps) {
   const product = data?.product;
   const productRelative = data?.productsRelative;
   const video =
-    product.categoryId.name === "Shoes" ? (
+    product?.category?.name === "Shoes" ? (
       <ShoesVideo />
-    ) : product.categoryId.name === "Dress" ? (
+    ) : product?.category?.name === "Dress" ? (
       <DressVideo />
     ) : (
       <VestVideo />
@@ -54,7 +54,7 @@ function ProductIdClient({ data }: ProductIdClientProps) {
           },
           {
             href: "",
-            name: product.name,
+            name: product?.name,
           },
         ]}
       />

@@ -12,7 +12,6 @@ import { ImagesHomePageAPI } from "@/apiRequest/imagesHomePageAPI";
 import Discover from "@/app/(hasbillboardLayout)/(root)/_components/discover";
 import Insurance from "@/app/(hasbillboardLayout)/(root)/_components/insurance";
 import ProductFeature from "@/app/(hasbillboardLayout)/(root)/_components/products-feature";
-import Chat from "./_components/chat";
 
 const text = [
   {
@@ -39,7 +38,8 @@ export default async function Home() {
     response = await productAPI.getListProduct({
       page: 1,
       limit: 100,
-      sortBy: "feature",
+      sortBy: "featured",
+      variants: [],
     });
     data = await ImagesHomePageAPI.getImagesHomePageAndDiscover();
   } catch (error) {
@@ -47,10 +47,18 @@ export default async function Home() {
   }
   return (
     <div>
-      <div className="flex lg:grid grid-cols-3 gap-x-2 mt-2 overflow-auto">
-        {data?.data?.ImagesHomePage.billboardFeature.map((value, index) => (
+      <h2 className="text-3xl font-medium mt-8 mb-10 text-[#606060] px-2 lg:px-20">Featured Product</h2>
+      {!response || !response?.data?.listProduct?.length ? (
+        <div className="text-center my-4 px-20">No results found</div>
+      ) : (
+        <Suspense fallback={<div>loading...</div>}>
+          <ProductFeature listProduct={response?.data.listProduct} />
+        </Suspense>
+      )}
+      <div className="flex px-20 lg:grid grid-cols-3 gap-x-2 mt-2 overflow-auto">
+        {data?.data?.ImagesHomePage?.billboard_feature.map((value, index) => (
           <Link
-            href={response?.data.listProduct?.[0].categoryId._id || ""}
+            href={response?.data.listProduct?.[0]?.category?._id || ""}
             className="overflow-hidden relative min-w-[310px] "
             key={value}
           >
@@ -58,9 +66,9 @@ export default async function Home() {
               alt=""
               priority
               src={value}
-              width={1000}
-              height={1000}
-              className="hover:scale-125 h-full select-none object-cover transition-all duration-9000"
+              width={800}
+              height={800}
+              className="hover:scale-125 h-full max-h-[500px] select-none object-cover transition-all duration-9000"
             />
             <div className="absolute bottom-9 px-5 left-3 lg:left-9  py-4  bg-opacity-45 w-full">
               <div className="mb-1 text-white font-medium break-words">{text[index].text1}</div>
@@ -73,18 +81,11 @@ export default async function Home() {
           </Link>
         ))}
       </div>
-      <h2 className="text-3xl font-medium mt-16 mb-10 text-[#606060] px-2 lg:px-20">Featured Product</h2>
-      {!response || !response?.data?.listProduct?.length ? (
-        <div className="text-center my-4 px-20">No results found</div>
-      ) : (
-        <Suspense fallback={<div>loading...</div>}>
-          <ProductFeature listProduct={response?.data.listProduct} />
-        </Suspense>
-      )}
-      <Insurance backgroundInsurance={data?.data?.ImagesHomePage.backgroundInsurance} />
+
+      {/* <Insurance backgroundInsurance={data?.data?.ImagesHomePage?.background_insurance} /> */}
       <Discover data={data} />
-      <Banner billboardBST={data?.data?.ImagesHomePage.billboardBST} />
-      <Chat />
+      <Banner billboardBST={data?.data?.ImagesHomePage?.billboard_banner} />
+      {/* <Chat /> */}
     </div>
   );
 }

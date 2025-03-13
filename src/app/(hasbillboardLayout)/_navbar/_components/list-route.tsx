@@ -9,20 +9,24 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { CategoryType, ListCategoryResType } from "@/Type/CategoryTypes";
 import Billboard from "@/app/(hasbillboardLayout)/_navbar/_components/billboard";
 import MenuMobile from "@/app/(hasbillboardLayout)/_navbar/_components/menu-mobile";
-import BannerSale from "@/app/(hasbillboardLayout)/_navbar/_components/banner-sale";
+import BannerSales from "@/app/(hasbillboardLayout)/_navbar/_components/banner-sales";
 import SearchInput from "@/app/(hasbillboardLayout)/_navbar/_components/search-input";
 import PreviewCard from "@/app/(hasbillboardLayout)/_navbar/_components/preview-cart";
+import { ListBillboardResType } from "@/Type/BillboardTypes";
 
 interface ListRouteProps {
   listCategory: ListCategoryResType["data"] | null;
+  listBillboard: ListBillboardResType["data"] | null;
+  store: any | null;
 }
-function ListRoute({ listCategory }: ListRouteProps) {
+function ListRoute({ store, listCategory, listBillboard }: ListRouteProps) {
   const pathName = usePathname();
   const currentCategory = listCategory?.find((category) => `/${category._id}` === pathName);
-  const listBillboard = listCategory?.map((category) => category.billboardId);
+  // const listBillboard = listCategory?.map((category) => category.billboardId);
 
   // Label Billboard truyền vào sẽ gồm 3 câu phân cách bởi dấu .
-  const labelSplit = currentCategory?.billboardId.label.split(".") || listCategory?.[0]?.billboardId.label.split(".");
+  // const labelSplit = currentCategory?.billboardId.label.split(".") || listCategory?.[0]?.billboardId.label.split(".");
+  const labelSplit = "this is bill board will apear in";
   return (
     <>
       <div className=" px-5 lg:px-10 py-3  border-b   fixed inset-x-0 top-0 bg-white/75 backdrop-blur-lg z-20">
@@ -35,6 +39,7 @@ function ListRoute({ listCategory }: ListRouteProps) {
               className="w-8"
               src={"https://res.cloudinary.com/dvyi5jxrm/image/upload/v1725116961/t2vvfvzknla0aw6oiagn.png"}
             />
+            {store?.name || "name store"}
           </Link>
           <div className="hidden lg:block">
             <Link
@@ -60,7 +65,6 @@ function ListRoute({ listCategory }: ListRouteProps) {
               );
             })}
           </div>
-
           <div className=" items-center gap-x-1 hidden lg:flex">
             <SearchInput />
             <Link
@@ -75,7 +79,6 @@ function ListRoute({ listCategory }: ListRouteProps) {
 
             <PreviewCard />
           </div>
-
           {/* mobile */}
           <div className="flex  items-center gap-x-1 lg:hidden">
             <SearchInput />
@@ -94,11 +97,13 @@ function ListRoute({ listCategory }: ListRouteProps) {
           </div>
         </div>
       </div>
-      {(pathName === `/${currentCategory?._id}` || pathName === "/") && (
+      {/* {( === `/${currentCategory?._id}` || pathName === "/") && ( */}
+      {pathName === "/" && (
         <>
-          <BannerSale pathName={pathName} />
-          {/* <Billboard billboard={currentCategory?.billboardId || listBillboard} />
-          <div className="flex justify-center flex-col items-center mt-20 mb-10 select-none">
+          <BannerSales pathName={pathName} />
+          {/* <Billboard billboard={currentCategory?.billboardId || listBillboard} /> */}
+          <Billboard listBillboard={listBillboard} />
+          {/* <div className="flex justify-center flex-col items-center mt-20 mb-10 select-none">
             <div className="font-semibold text-lg">{labelSplit?.[0]}</div>
             <div className="font-bold text-[80px] leading-[90px]">{labelSplit?.[1]} </div>
             <div className="font-medium text-center max-w-[900px]">{labelSplit?.[2]}</div>
@@ -107,7 +112,7 @@ function ListRoute({ listCategory }: ListRouteProps) {
         </>
       )}
 
-      {pathName === "/" && (
+      {/* {pathName === "/" && (
         <>
           <Billboard billboard={currentCategory?.billboardId || listBillboard} />
           <div className="flex justify-center flex-col items-center mt-20 mb-10 select-none px-2 lg:px-[300px]">
@@ -117,7 +122,7 @@ function ListRoute({ listCategory }: ListRouteProps) {
             {pathName === `/` && <Button className="mt-6 rounded-full">Shop</Button>}
           </div>
         </>
-      )}
+      )} */}
     </>
   );
 }

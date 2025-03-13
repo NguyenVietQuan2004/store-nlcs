@@ -20,8 +20,10 @@ function PreviewModalInfo({ product, onClose }: PreviewModalInfoProps) {
   return (
     <>
       <div className="flex items-end gap-x-6">
-        <h2 className="text-2xl font-bold">{product.name}</h2>
-        <div className=" text-[#28a745] font-light mt-4">Just in {formattedPrice(product.arrayPrice[0].price)}</div>
+        <h2 className="text-2xl font-bold">{product?.name}</h2>
+        <div className=" text-[#28a745] font-light mt-4">
+          Just in {formattedPrice(product.product_variants[0].price)}
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-x-2">
         <div>
@@ -34,7 +36,7 @@ function PreviewModalInfo({ product, onClose }: PreviewModalInfoProps) {
           />
         </div>
         <div className="grid grid-cols-2 gap-2 overflow-auto max-h-[428px]">
-          {product.images.map((image) => (
+          {product?.images.map((image) => (
             <div key={image} className={` rounded-sm p-1`} onMouseEnter={() => setCurrentImage(image)}>
               <Image
                 alt=""
@@ -49,7 +51,7 @@ function PreviewModalInfo({ product, onClose }: PreviewModalInfoProps) {
       </div>
       <Button
         onClick={() => {
-          router.push(`/${product.categoryId._id}/${product._id}`);
+          router.push(`/${product.category._id}/${product._id}`);
           onClose();
         }}
         className="text-blue-400 ml-auto outline-none border-none underline "

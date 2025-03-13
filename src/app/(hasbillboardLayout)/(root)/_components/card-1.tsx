@@ -11,7 +11,7 @@ interface Card1Props {
 }
 function Card1({ listProduct }: Card1Props) {
   return (
-    <div className="mt-4">
+    <div className="">
       <div className="flex justify-between">
         <h3 className="text-2xl font-semibold">Top ranking</h3>
       </div>
@@ -36,13 +36,13 @@ function Card1({ listProduct }: Card1Props) {
                   <div className="relative">
                     <Image
                       alt=""
-                      src={product.images[0]}
+                      src={product?.images[0]}
                       width={1000}
                       height={1000}
                       className="w-full aspect-square rounded-2xl mt-7 object-cover"
                     />
                     <div className="text-sm absolute rounded-lg bg-white px-2 py-1 top-4 left-4">
-                      Popularity score: {Math.floor(((product.arrayPrice[0].price / 5) % 5) * 10) / 10}
+                      Popularity score: {Math.floor(((product.sales / 5) % 5) * 10) / 10}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-3 mt-6">

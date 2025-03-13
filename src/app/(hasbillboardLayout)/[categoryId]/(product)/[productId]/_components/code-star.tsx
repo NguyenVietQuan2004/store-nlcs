@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createUniqueArray, generateRandomCode } from "@/lib/utils";
 import { StarBlackIcon, StarIcon } from "../../../../../../../public/icons";
 
-function CodeStar({ maxAmount }: { maxAmount: number }) {
+function CodeStar({ maxAmount, id }: { maxAmount: number; id: string }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function CodeStar({ maxAmount }: { maxAmount: number }) {
   if (!isMounted) return null;
   return (
     <div className="flex justify-between items-center">
-      <div> Mã sản phẩm: {generateRandomCode()} </div>
+      <div> Mã sản phẩm: {id?.slice(0, 7)} </div>
       <div className="flex items-center">
         {createUniqueArray(maxAmount % 5).map((val: any) => (
           <StarIcon key={val} />

@@ -7,9 +7,8 @@ interface Card2Props {
 }
 async function Card2({ listProduct }: Card2Props) {
   let countNewProduct = 0;
-
   listProduct?.forEach((val) => {
-    if (compareDay(val.createdAt)) {
+    if (compareDay(val?.createdAt as any)) {
       countNewProduct++;
     }
   });
@@ -21,11 +20,11 @@ async function Card2({ listProduct }: Card2Props) {
       <div className="p-5 bg-white rounded-2xl my-2 lg:my-6">
         <h4 className="text-xl font-medium mb-4">{countNewProduct}+ products added today</h4>
         <div className="grid grid-cols-2 gap-4">
-          {listProduct?.slice(0, 4).map((product) => (
-            <div key={product._id}>
+          {listProduct?.slice(0, 4).map((product, index) => (
+            <div key={product?._id || index}>
               <Image
                 alt=""
-                src={product.images[0]}
+                src={product?.images[0]}
                 width={1000}
                 height={1000}
                 className="rounded-xl aspect-square object-cover select-none"
@@ -38,7 +37,7 @@ async function Card2({ listProduct }: Card2Props) {
         <div className=" w-[132px] h-[132px] flex items-center">
           <Image
             alt=""
-            src={listProduct?.[4]?.images[0] || ""}
+            src={listProduct?.[0]?.images[0] || ""}
             width={500}
             height={500}
             className="rounded-xl w-full aspect-square  object-cover select-none"

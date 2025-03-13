@@ -2,9 +2,9 @@ import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
-const bannerSale = [
+const bannerSales = [
   {
-    heading: "New Styles On Sale: Up To 40% Off",
+    heading: "New Styles On Sales: Up To 40% Off",
     underline: "Shop All Our New Markdowns",
   },
   {
@@ -18,7 +18,7 @@ const bannerSale = [
   },
 ];
 
-function BannerSale({ pathName }: { pathName: string }) {
+function BannerSales({ pathName }: { pathName: string }) {
   return (
     <div className="bg-[#f7f7f7] mt-[66px] px-[2px] pb-1">
       <Carousel
@@ -34,7 +34,7 @@ function BannerSale({ pathName }: { pathName: string }) {
         className="max-w-[650px] mx-auto"
       >
         <CarouselContent>
-          {bannerSale.map((item) => (
+          {bannerSales.map((item) => (
             <CarouselItem key={item.heading}>
               <div
                 className={`flex items-center ${
@@ -71,4 +71,4 @@ function BannerSale({ pathName }: { pathName: string }) {
   );
 }
 
-export default BannerSale;
+export default BannerSales;

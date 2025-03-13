@@ -6,17 +6,22 @@ import Filter from "../filter";
 import { ListSizeResType } from "@/Type/SizeTypes";
 import { ListColorResType } from "@/Type/ColorType";
 import { Button } from "@/components/ui/button";
+import { ProductResType } from "@/Type/ProductType";
 
 interface FilterMobileProps {
   filter: any;
   setFilter: React.Dispatch<SetStateAction<any>>;
-  listSize: ListSizeResType["data"] | undefined;
-  listColor: ListColorResType["data"] | undefined;
+  attributes: ProductResType["data"]["product"]["category"]["attributes"] | undefined;
 }
 
-function FilterMobile({ filter, setFilter, listColor, listSize }: FilterMobileProps) {
+function FilterMobile({ filter, setFilter, attributes }: FilterMobileProps) {
   const [isShowModalFilter, setIsShowModalFilter] = useState(false);
-
+  const typeFilter = Object.assign(
+    {},
+    ...(attributes?.map((attr) => ({
+      [attr.name]: undefined,
+    })) ?? [])
+  );
   useEffect(() => {
     const html = document.getElementsByTagName("html")[0];
     html.style.overflow = isShowModalFilter ? "hidden" : "";
@@ -43,23 +48,19 @@ function FilterMobile({ filter, setFilter, listColor, listSize }: FilterMobilePr
           </div>
           <Combobox filter={filter} setFilter={setFilter} />
           <div className="flex flex-col mt-5 gap-y-10  max-h-[400px] overflow-auto pb-20">
-            {" "}
-            <Filter
-              autoShow={true}
-              filter={filter}
-              setFilter={setFilter}
-              data={listSize}
-              valueKey="sizeId"
-              name="Sizes"
-            />
-            <Filter
-              autoShow={true}
-              filter={filter}
-              setFilter={setFilter}
-              data={listColor}
-              valueKey="colorId"
-              name="Colors"
-            />
+            {attributes?.map((attribute, index) => {
+              return (
+                <Filter
+                  key={attribute.name}
+                  filter={filter}
+                  setFilter={setFilter}
+                  data={attribute.values}
+                  valueKey={attribute.name}
+                  name={attribute.name}
+                  autoShow={true}
+                />
+              );
+            })}
           </div>
           <div className="absolute border-t bg-white py-4 px-6 flex gap-4 bottom-0 right-0 left-0 justify-center">
             <Button
@@ -67,8 +68,7 @@ function FilterMobile({ filter, setFilter, listColor, listSize }: FilterMobilePr
               variant={"outline"}
               onClick={() =>
                 setFilter({
-                  colorId: undefined,
-                  sizeId: undefined,
+                  ...typeFilter,
                   sortBy: "",
                 })
               }

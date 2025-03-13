@@ -19,21 +19,24 @@ import FilterMobile from "@/app/(hasbillboardLayout)/[categoryId]/(product)/filt
 
 interface CategoryClientProps {
   limitServer: number;
-  listSize: SizeType[] | undefined;
-  listColor: ColorType[] | undefined;
   listProductInit: ListProductResType | null;
   value?: string;
 }
 // phân trang servẻ và client tự code cực hay
 
-function CategoryClient({ listProductInit, listSize, listColor, limitServer, value }: CategoryClientProps) {
+function CategoryClient({ listProductInit, limitServer, value }: CategoryClientProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isShowFilter, setIsShowFilter] = useState(true);
   const [listProduct, setListProduct] = useState(listProductInit);
+  const typeFilter = Object.assign(
+    {},
+    ...(listProductInit?.data?.listProduct[0]?.category?.attributes.map((attr) => ({
+      [attr.name]: undefined,
+    })) ?? [])
+  );
   const [filter, setFilter] = useState({
-    colorId: undefined,
-    sizeId: undefined,
+    ...typeFilter,
     sortBy: "",
   });
 
@@ -89,27 +92,33 @@ function CategoryClient({ listProductInit, listSize, listColor, limitServer, val
 
     const skip = updateSkip();
     if (currentPage.server === Math.ceil(currentPage.client / numberPageClientOfOnePageServer)) {
-      const data = listProduct?.data.listProduct?.slice(skip, skip + limitClient);
+      const data = listProduct?.data?.listProduct?.slice(skip, skip + limitClient);
       setItems(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage.client, listProduct]);
-
   useEffect(() => {
     // tránh gọi api ở lần đầu mounted
     if (!isMounted) return;
     const fetchAPI = async () => {
       // gọi api lấy sản phẩm khi chuyển sang page server mới hoặc filter sản phẩm
       try {
+        const { sortBy, ...filterVariants } = filter;
+        const variants = Object.keys(filterVariants)
+          .filter((key) => filterVariants[key]) // Loại bỏ key có giá trị falsy (null, undefined, "", 0)
+          .map((key) => ({
+            key: key,
+            values: [filterVariants[key]],
+          }));
+
         setIsLoading(true);
         const response = await productAPI.getListProduct({
-          categoryId: params.categoryId as string,
-          sizeId: filter.sizeId,
-          colorId: filter.colorId,
+          category_id: params.categoryId as string,
           page: currentPage.server,
           limit: limitServer,
           sortBy: filter.sortBy || undefined,
           value,
+          variants: JSON.stringify(variants) as any,
         });
         setListProduct(response);
         setCurrentPage({ server: 1, client: 1 });
@@ -129,26 +138,26 @@ function CategoryClient({ listProductInit, listSize, listColor, limitServer, val
   };
   return (
     <>
-      <div className=" text-sm mt-16 tracking-widest mb-2">
+      <div className=" text-sm mt-36 tracking-widest mb-2">
         {value ? (
           <div className="text-sm font-medium text-[#111111]">Search result for</div>
         ) : (
           <BreadCrum
             listBread={[
               { name: "Home", href: "/" },
-              { name: `${items?.[0]?.categoryId?.name}`, href: `/${items?.[0]?.categoryId?._id}` },
+              { name: `${items?.[0]?.category?.name || ""}`, href: `/${items?.[0]?.category?._id}` },
             ]}
           />
         )}
       </div>
       <div className=" flex justify-between items-center my-6">
         <div className="text-2xl font-medium">
-          {!value ? items?.[0]?.categoryId?.name : value} ({listProduct?.data.totalProduct || "0"})
+          {!value ? items?.[0]?.categoryId?.name : value} ({listProduct?.data?.totalProduct || "0"})
         </div>
         <div className="hidden lg:flex items-center gap-8">
           <div>
             <span className="text-[#a6a6a6]"> Showing </span>
-            {items?.length} of {listProduct?.data.totalProduct}{" "}
+            {items?.length} of {listProduct?.data?.totalProduct}{" "}
             <span className="text-[#a6a6a6]"> {items?.[0]?.categoryId?.name} </span>
           </div>
           <button className="flex items-center gap-1 font-medium" onClick={() => setIsShowFilter(!isShowFilter)}>
@@ -158,7 +167,11 @@ function CategoryClient({ listProductInit, listSize, listColor, limitServer, val
             <span className="font-medium">Sort By:</span> <Combobox filter={filter} setFilter={setFilter} />
           </div>
         </div>
-        <FilterMobile listColor={listColor} listSize={listSize} filter={filter} setFilter={setFilter} />
+        <FilterMobile
+          filter={filter}
+          setFilter={setFilter}
+          attributes={listProductInit?.data?.listProduct[0]?.category.attributes}
+        />
       </div>
       <div className="flex mb-20">
         <div
@@ -170,16 +183,25 @@ function CategoryClient({ listProductInit, listSize, listColor, limitServer, val
             className="text-end my-1 mb-4 hover:opacity-70"
             onClick={() =>
               setFilter({
-                colorId: undefined,
-                sizeId: undefined,
+                ...typeFilter,
                 sortBy: "",
               })
             }
           >
             Clear Filters ({Object.values(filter).filter((item) => item).length})
           </button>
-          <Filter filter={filter} setFilter={setFilter} data={listSize} valueKey="sizeId" name="Sizes" />
-          <Filter filter={filter} setFilter={setFilter} data={listColor} valueKey="colorId" name="Colors" />
+          {listProductInit?.data?.listProduct[0]?.category.attributes.map((attribute, index) => {
+            return (
+              <Filter
+                key={attribute.name}
+                filter={filter}
+                setFilter={setFilter}
+                data={attribute.values}
+                valueKey={attribute.name}
+                name={attribute.name}
+              />
+            );
+          })}
         </div>
         {!listProduct || !listProduct?.data?.listProduct?.length ? (
           <div className="text-center flex-1 flex justify-center  items-center"> No results found</div>
@@ -200,7 +222,7 @@ function CategoryClient({ listProductInit, listSize, listColor, limitServer, val
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={Math.ceil((listProduct?.data.totalProduct || 0) / limitClient)}
+          pageCount={Math.ceil((listProduct?.data?.totalProduct || 0) / limitClient)}
           previousLabel="< previous"
           renderOnZeroPageCount={null}
           forcePage={currentPage.client - 1}

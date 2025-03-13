@@ -30,9 +30,9 @@ function CartClientNotSuspen() {
   // gọi api lấy lại thông tin sản phẩm mới nhất khi mounted tránh đang giữ thông tin cũ gây sai số lượng
   const fetchAPI = async () => {
     const data = await productAPI.getListByListId({ listIdProduct });
-    onUpdateWhenMounted(data.data.listProduct);
+    if (data?.data) onUpdateWhenMounted(data?.data.listProduct);
   };
-
+  const { addItemFavourite } = useFavourite();
   // coi lại chỗ này
   useEffect(() => {
     if (isMounted === true) fetchAPI();
@@ -46,7 +46,7 @@ function CartClientNotSuspen() {
     onOpen(item);
   };
   const handleCheckout = async () => {
-    const filterItemsOutOfStock = items.filter((item) => item.amount !== 0);
+    const filterItemsOutOfStock = items.filter((item) => item.quantity !== 0);
     if (!filterItemsOutOfStock.length) return;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_ADMIN}/checkout`, {
       method: "POST",
@@ -56,7 +56,6 @@ function CartClientNotSuspen() {
       },
     });
     const data = await response.json();
-    console.log(data);
     if (data.statusCode === 401) {
       toast({
         title: data.message || "",
@@ -123,8 +122,7 @@ function CartClientNotSuspen() {
     onUpdateAmount({
       old: {
         productId: item.product._id,
-        size: item.size,
-        color: item.color,
+        product_variant_id: item.product_variant_id,
       },
       new: {
         amount: parseInt(newAmount),
@@ -136,16 +134,19 @@ function CartClientNotSuspen() {
     <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 px-2   xl:px-[100px] ">
       <div className="lg:col-span-4 max-w-full overflow-hidden  ">
         {items.map((item) => {
-          const objectPrice = item.product.arrayPrice.find((objectPrice: any) => objectPrice.size === item.size);
+          const objectPrice = item.product.product_variants.find(
+            (objectPrice: any) => objectPrice._id === item.product_variant_id
+          );
+
           // totalPrice += (objectPrice?.price || 0) * item.amount || 0;
           totalPrice +=
-            ((objectPrice?.price || 0) * item.amount * (item.product.sale ? 100 - item.product.sale : 1)) / 100;
+            (item.snapshot_price || 0) * item.quantity * (item.product.sales ? (100 - item.product.sales) / 100 : 1);
 
           //  chỉ hiện tối đa 10 select quantity
           const arraySelect =
-            (objectPrice?.amount || 0) > 10 ? createArrayByOrder(10) : createArrayByOrder(objectPrice?.amount || 0);
+            (objectPrice?.stock || 0) > 10 ? createArrayByOrder(10) : createArrayByOrder(objectPrice?.stock || 0);
           return (
-            <React.Fragment key={item.product._id + item.size + item.color}>
+            <React.Fragment key={item.product._id + item.product_variant_id}>
               <div className={` flex justify-between items-center `}>
                 <div className="flex flex-1 gap-4 ">
                   <div>
@@ -161,21 +162,26 @@ function CartClientNotSuspen() {
                     <div className="leading-[28px] ">
                       <div className=" lg:hidden font-medium  col-span-2 self-start ">
                         {formattedPrice(
-                          ((objectPrice?.price || 0) *
-                            item.amount *
-                            (item.product.sale ? 100 - item.product.sale : 1)) /
+                          (item.snapshot_price * item.quantity * (item.product.sales ? 100 - item.product.sales : 1)) /
                             100
                         )}
                       </div>
                       <div
                         className={`  font-semibold text-[#111111] line-clamp-2 ${
-                          objectPrice?.amount === 0 && "text-[#707072]"
+                          objectPrice?.stock === 0 && "text-[#707072]"
                         }`}
                       >
                         {item.product.name}
                       </div>
-                      <div className="line-clamp-1  ">{item.product.categoryId.name}</div>
-                      <div style={{ backgroundColor: item.color }} className="my-1 w-5 h-5 border rounded-full"></div>
+                      <div className="line-clamp-1  ">{item.product.category.name}</div>{" "}
+                      {/* {item.product.variants[1]?.name} */}
+                      {Object.keys(objectPrice?.variant_values || {})[1] ? (
+                        <>
+                          {Object.keys(objectPrice?.variant_values || {})[1]}:{" "}
+                          {Object.values(objectPrice?.variant_values || {})[1]}
+                        </>
+                      ) : null}
+                      {/* <div style={{ backgroundColor: item.color }} className="my-1 w-5 h-5 border rounded-full"></div> */}
                       <div className="flex items-start lg:items-center gap-4">
                         <button
                           onClick={(e) => {
@@ -185,17 +191,21 @@ function CartClientNotSuspen() {
                           className="flex lg:items-center flex-col lg:flex-row
                           "
                         >
-                          Size{" "}
-                          <span className="whitespace-nowrap overflow-hidden leading-[24px]  lg:ml-2 border border-transparent border-b-[#707072] hover:opacity-75">
-                            {item.size}
-                          </span>
+                          {true ? (
+                            <>
+                              {Object.keys(objectPrice?.variant_values || {})[0]}:{" "}
+                              <span className="whitespace-nowrap overflow-hidden leading-[24px]  lg:ml-2 border border-transparent border-b-[#707072] hover:opacity-75">
+                                {Object.values(objectPrice?.variant_values || {})[0]}
+                              </span>
+                            </>
+                          ) : null}
                         </button>
                         <div className="flex items-center gap-2">
-                          {objectPrice?.amount !== 0 ? (
+                          {objectPrice?.stock !== 0 ? (
                             <>
                               Quantity
                               <select
-                                value={item.amount}
+                                value={item.quantity}
                                 onChange={(e) => handleOnchangeSelect(item, e.target.value)}
                                 className="w-12 text-sm pl-3"
                               >
@@ -204,8 +214,8 @@ function CartClientNotSuspen() {
                                     {val}
                                   </option>
                                 ))}
-                                {!arraySelect.includes(item.amount) && (
-                                  <option value={item.amount}>{item.amount}</option>
+                                {!arraySelect.includes(item.quantity) && (
+                                  <option value={item.quantity}>{item.quantity}</option>
                                 )}
                               </select>
                             </>
@@ -219,7 +229,7 @@ function CartClientNotSuspen() {
                       <IconButton
                         onClick={(e) => {
                           e.preventDefault();
-                          handleRemoveItem(item);
+                          addItemFavourite(item.product);
                         }}
                       >
                         <HeartIcon />
@@ -236,11 +246,10 @@ function CartClientNotSuspen() {
                   </div>
                 </div>
                 <div className="hidden lg:flex font-medium  flex-col col-span-2 self-start ">
-                  <span className="text-sm text-[#707072]">{formattedPrice(objectPrice?.price || 0)} for one</span>
+                  <span className="text-sm text-[#707072]">{formattedPrice(item.snapshot_price)} for one</span>
                   <span>
                     {formattedPrice(
-                      ((objectPrice?.price || 0) * item.amount * (item.product.sale ? 100 - item.product.sale : 1)) /
-                        100
+                      item.snapshot_price * item.quantity * (item.product.sales ? (100 - item.product.sales) / 100 : 1)
                     )}
                   </span>
                 </div>
