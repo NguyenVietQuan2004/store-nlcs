@@ -13,6 +13,7 @@ import BannerSales from "@/app/(hasbillboardLayout)/_navbar/_components/banner-s
 import SearchInput from "@/app/(hasbillboardLayout)/_navbar/_components/search-input";
 import PreviewCard from "@/app/(hasbillboardLayout)/_navbar/_components/preview-cart";
 import { ListBillboardResType } from "@/Type/BillboardTypes";
+import UserAvatar from "@/components/user-avatar";
 
 interface ListRouteProps {
   listCategory: ListCategoryResType["data"] | null;
@@ -78,8 +79,12 @@ function ListRoute({ store, listCategory, listBillboard }: ListRouteProps) {
             </Link>
 
             <PreviewCard />
+            <div className="px-2 lg:ml-auto">
+              <UserAvatar />
+            </div>
           </div>
           {/* mobile */}
+
           <div className="flex  items-center gap-x-1 lg:hidden">
             <SearchInput />
             <Link
@@ -102,7 +107,7 @@ function ListRoute({ store, listCategory, listBillboard }: ListRouteProps) {
         <>
           <BannerSales pathName={pathName} />
           {/* <Billboard billboard={currentCategory?.billboardId || listBillboard} /> */}
-          <Billboard listBillboard={listBillboard} />
+          <Billboard listBillboard={listBillboard} category={listCategory?.[0]} />
           {/* <div className="flex justify-center flex-col items-center mt-20 mb-10 select-none">
             <div className="font-semibold text-lg">{labelSplit?.[0]}</div>
             <div className="font-bold text-[80px] leading-[90px]">{labelSplit?.[1]} </div>

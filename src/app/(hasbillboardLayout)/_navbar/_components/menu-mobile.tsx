@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { CategoryType, ListCategoryResType } from "@/Type/CategoryTypes";
 import { CloseIconMobile, HeartIcon, MenuIcon } from "../../../../../public/icons";
+import UserAvatar from "@/components/user-avatar";
 
 interface MenuMobileProps {
   pathName: string;
@@ -41,8 +42,9 @@ function MenuMobile({ listCategory, pathName }: MenuMobileProps) {
       </Button>
       {isShowModalMenu && (
         <div onClick={handleClick} className="fixed top-0 right-0 left-0 h-[calc(100vh-50px)] sm:h-[100vh] bg-black/35">
-          <div ref={ref} className=" absolute  p-6 pt-0 top-0 bottom-0 right-0 sm:max-w-[50%] w-[300px] bg-white">
+          <div ref={ref} className=" absolute p-6 pt-0 top-0 bottom-0 right-0 sm:max-w-[50%] w-[300px] bg-white">
             <div className="flex justify-between items-center">
+              <UserAvatar />
               <div className="text-xl font-semibold">Category</div>
               <button onClick={() => setIsShowModalMenu(false)} className="p-5 pr-0">
                 <CloseIconMobile />

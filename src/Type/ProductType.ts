@@ -31,7 +31,7 @@ export const Product = z.object({
   _id: z.string(),
   name: z.string().min(1),
   search_keywords: z.array(z.string()).default([]),
-  description: z.string().optional(),
+  description: z.string(),
   store_id: z.string(),
   category_id: z.string(),
   category: Category,
@@ -48,8 +48,8 @@ export const Product = z.object({
     )
     .default([]),
   product_variants: z.array(ProductVariantSchema),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
 //  PRODUCT BODY TYPE -- chỗ này khác với client

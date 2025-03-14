@@ -10,17 +10,17 @@ interface DiscoverProps {
 
 function Discover({ data }: DiscoverProps) {
   return (
-    <div className="bg-[#f4f4f4] pt-10 lg:pt-[80px] px-2 lg:px-10 py-10 text-[#111111]">
+    <div className="bg-[#f4f4f4] pt-10 lg:pt-[80px] px-2 lg:px-20 py-10 text-[#111111]">
       {/* <h2 className=" font-semibold text-[32px]">Discover your next business opportunity</h2> */}
-      <div className="flex flex-col lg:grid grid-cols-3 gap-y-6 lg:mt-12 lg:gap-x-8 ">
-        <Card1 listProduct={data?.data?.listProductMostPopular} />
-        <Card2
+      <div className="">
+        {/* <Card1 listProduct={data?.data?.listProductMostPopular} /> */}
+        {/* <Card2
           listProduct={
             (data?.data?.listProductNewDiscover.length || 0) > 0
               ? data?.data?.listProductNewDiscover
               : [data?.data?.productHighestSales!]
           }
-        />
+        /> */}
         <Card3
           productBestSeller={data?.data?.productBestSeller}
           productHighestSales={data?.data?.productHighestSales}

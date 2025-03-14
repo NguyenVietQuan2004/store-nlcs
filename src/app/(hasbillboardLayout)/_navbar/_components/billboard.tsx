@@ -3,10 +3,19 @@ import Autoplay from "embla-carousel-autoplay";
 
 import { BillboardType } from "@/Type/BillboardTypes";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+import { CategoryType } from "@/Type/CategoryTypes";
+import { cn } from "@/lib/utils";
 
 // function Billboard({ billboard }: { billboard: BillboardType | undefined | BillboardType[] }) {
-function Billboard({ listBillboard }: { listBillboard: null | BillboardType[] }) {
+function Billboard({
+  listBillboard,
+  category,
+}: {
+  listBillboard: null | BillboardType[];
+  category: CategoryType | undefined;
+}) {
   // billboard có thể là 1 mảng hoặc 1 ảnhh
   if (Array.isArray(listBillboard)) {
     return (
@@ -28,8 +37,8 @@ function Billboard({ listBillboard }: { listBillboard: null | BillboardType[] })
                 {listBillboard.map((billboard) => {
                   return (
                     <CarouselItem key={billboard._id} className="pl-10  ">
-                      <div className="relative z-30 mb-10 flex   ">
-                        <div className="w-[60%]">
+                      <div className="relative z-30 mb-10 flex gap-3 flex-col lg:flex-row  ">
+                        <div className="w-full lg:w-[60%]">
                           {billboard && (
                             <Image
                               alt=""
@@ -37,14 +46,23 @@ function Billboard({ listBillboard }: { listBillboard: null | BillboardType[] })
                               src={billboard.image}
                               width={1000}
                               height={300}
-                              className="w-full z-20 max-h-[400px]  object-cover  select-none rounded-tl-[100px] rounded-br-[100px]"
+                              className="w-full z-20 max-h-[300px]  object-cover  select-none rounded-tl-[100px] rounded-br-[100px]"
                             />
                           )}
                           <div className="absolute inset-0 h-full top-[5%] rounded-br-[100px] z-0 -right-[3%] border border-l-transparent border-t-transparent"></div>
                         </div>
-                        <div className="w-[40%] flex justify-center flex-col items-center mt-20 mb-10 select-none">
-                          <div className="font-bold  text-center text-[30px] leading-[40px]">{billboard.label} </div>
-                          {true && <Button className="mt-6 rounded-full">Shop</Button>}
+                        <div className="w-full lg:w-[40%] flex justify-center flex-col items-center mt-4 lg:mt-20 mb-4 lg:mb-10 select-none">
+                          <div className="font-bold  text-center text-[20px] line-clamp-3 lg:text-[24px] leading-[30px]">
+                            {billboard.label}{" "}
+                          </div>
+                          {true && (
+                            <Link
+                              href={`/${category?._id}`}
+                              className={cn(buttonVariants({ variant: "default", size: "lg" }), "mt-6 rounded-full")}
+                            >
+                              Shop
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </CarouselItem>

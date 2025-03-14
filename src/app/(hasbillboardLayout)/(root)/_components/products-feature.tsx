@@ -8,9 +8,11 @@ import { useEffect, useState } from "react";
 
 interface ProductFeatureProps {
   listProduct: ListProductResType["data"]["listProduct"];
+  title?: string;
+  scroll?: boolean;
 }
 
-function ProductFeature({ listProduct }: ProductFeatureProps) {
+function ProductFeature({ listProduct, title, scroll }: ProductFeatureProps) {
   const [numbProductShow, setNumbProductShow] = useState(10);
   useEffect(() => {
     const handleResize = () => {
@@ -41,7 +43,12 @@ function ProductFeature({ listProduct }: ProductFeatureProps) {
           const listSlice = listProduct.slice(index * numbProductShow, (index + 1) * numbProductShow);
           return (
             <CarouselItem key={val}>
-              <ListProductCard gridCols={numbProductShow === 10 ? 5 : 2} listProduct={listSlice} />
+              <ListProductCard
+                scroll={scroll}
+                title={title}
+                gridCols={numbProductShow === 10 ? 5 : 2}
+                listProduct={listSlice}
+              />
             </CarouselItem>
           );
         })}

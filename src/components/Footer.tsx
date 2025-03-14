@@ -13,7 +13,7 @@ const list = [
   },
 
   {
-    id: "About Hange",
+    id: "About Shop",
     data: ["News", "Careers", "Investors", "Sustainability"],
   },
 ];

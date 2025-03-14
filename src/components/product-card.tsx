@@ -13,23 +13,33 @@ import { object } from "zod";
 
 interface ProductCardProps {
   product: ProductType;
+  title?: string;
 }
 
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product, title }: ProductCardProps) {
   const price = product.product_variants[0].price;
   const { onOpen } = useModalPreview();
   const onPreview: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     onOpen(product);
   };
-
-  const totalColors = 2;
   return (
     <Link
       key={product._id}
       href={`/${product.category._id}/${product._id}`}
-      className="group   rounded-lg cursor-pointer  flex flex-col select-none shadow-lg"
+      className="group relative  rounded-lg cursor-pointer  flex flex-col select-none shadow-lg"
     >
+      {title === "new" && (
+        <div className="inline-block absolute top-2 left-2 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+          NEW
+        </div>
+      )}
+      {title === "sales" && (
+        <div className="text-[12px] text-[rgb(238, 77, 45)] right-0 rounded-bl-sm  text-[#ee4d2d] absolute z-10  bg-[#feeeea] px-1 py-1">
+          -{product?.sales}%
+        </div>
+      )}
+
       <div className="relative">
         <Image
           priority

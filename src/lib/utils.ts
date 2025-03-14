@@ -61,3 +61,6 @@ export const compareDay = (dateString: string) => {
   // So sánh
   return yearToCompare === yearNow && monthToCompare === monthNow && dayToCompare === dayNow;
 };
+export const firstKey = (object: { [key: string]: any }) => {
+  return Object.keys(object)[0];
+};

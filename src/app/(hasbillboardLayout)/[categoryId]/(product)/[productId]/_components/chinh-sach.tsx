@@ -16,18 +16,18 @@ function ChinhSach() {
       </div>
 
       <div className={`text-sm font-light ${isReadFull ? "h-full" : "h-[73px]"} overflow-hidden `}>
-        Hange hopes you will like the product you ordered. However, if you are not 100% satisfied, Hange offers a simple
+        Shop hopes you will like the product you ordered. However, if you are not 100% satisfied, Shop offers a simple
         return process as follows:
         <br />
-        <br /> 1- Please call the hotline at 0969.436.090 or send a message on our Hange Design Facebook page to request
+        <br /> 1- Please call the hotline at 0969.436.090 or send a message on our Shop Design Facebook page to request
         a return.
-        <br /> 2- Hange will check, confirm, and assist you within 30 minutes.
+        <br /> 2- Shop will check, confirm, and assist you within 30 minutes.
         <br />
         <br />
         Requirements:
         <br /> 1. Returns must be made within 7 days from the date you received the item.
         <br /> 2. The returned item must be in its original packaging, with tags and barcode intact, and unused.
-        <br /> 3. If the issue is due to a manufacturing defect, Hange will cover the shipping cost for the return.
+        <br /> 3. If the issue is due to a manufacturing defect, Shop will cover the shipping cost for the return.
         <br />{" "}
         <Link href="/chinh-sach/chinh-sach-doi-tra" className="underline text-blue-400">
           Learn more

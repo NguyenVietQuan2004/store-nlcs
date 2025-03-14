@@ -13,7 +13,7 @@ function ChinhSachDoiTra() {
       <ul className="ml-5 list-disc *:ml-5 *:leading-[28px]">
         <li>
           Hàng hóa bảo hành phải còn nguyên tem bảo hành, tem sản phẩm và giấy biên nhận chứng minh là quý khách đã mua
-          hàng từ Hange.com.vn.
+          hàng từ Shop.com.vn.
         </li>
         <li>
           Đối với những hỏng hóc như: Làm vỡ, làm hỏng, gây biến dạng, để lửa gây hư hại và các trường hợp tương tự khác
@@ -61,12 +61,12 @@ function ChinhSachDoiTra() {
       <h3 className="!text-base font-bold">5. Chính sách hoàn tiền</h3>
       <div className="*:leading-[30px] *: ml-5">
         <p>
-          Sau khi nhận được xác nhận hoàn tiền, Hange sẽ tiến hành hoàn tiền cho khách hàng trong vòng 48h kể từ thời
+          Sau khi nhận được xác nhận hoàn tiền, Shop sẽ tiến hành hoàn tiền cho khách hàng trong vòng 48h kể từ thời
           điểm xác nhận hoàn tiền.
         </p>
         <p>
           Tiền hoàn sẽ được chuyển khoản theo yêu cầu của khách hàng: Quý ra voucher hoặc tiền mặt, thanh toán tại điểm
-          giao dịch của hàng của Hange hoặc chuyển khoản qua số tài khoản cá nhân của khách hàng.
+          giao dịch của hàng của Shop hoặc chuyển khoản qua số tài khoản cá nhân của khách hàng.
         </p>
         <p>Chúng tôi cũng rất cảm ơn sự đóng góp ý kiến của quý khách hàng về sản phẩm và dịch vụ của chúng tôi.</p>
         <p>

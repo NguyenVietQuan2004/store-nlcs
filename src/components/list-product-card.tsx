@@ -13,11 +13,13 @@ function ListProductCard({
   gridCols,
   scroll = false,
   isLoading = false,
+  title,
 }: {
   listProduct: ListProductResType["data"]["listProduct"] | undefined;
   gridCols: number;
   scroll?: boolean;
   isLoading?: boolean;
+  title?: string;
 }) {
   const { removeItemFavourite } = useFavourite();
   const handleDeleteFavourite = (item: ProductType) => {
@@ -28,11 +30,11 @@ function ListProductCard({
     <>
       {!scroll && (
         <div
-          className={`flex-1 items-start relative  grid  gap-2 lg:gap-4 pb-10 `}
+          className={`flex-1 items-start relative mb-2  grid  gap-2 lg:gap-4 pb-10 `}
           style={{ gridTemplateColumns: `repeat(${gridCols}, 1fr)` }}
         >
           {listProduct?.map((product) => {
-            return <ProductCard key={product._id} product={product} />;
+            return <ProductCard title={title} key={product._id} product={product} />;
           })}
           {isLoading && <div className=" absolute inset-0  bg-white/70"></div>}
         </div>
@@ -40,12 +42,12 @@ function ListProductCard({
       {/* overflow scroll */}
       {scroll && (
         <div
-          className={`flex-1 items-start flex overflow-auto gap-2 lg:gap-4 pb-10 !scrollbar-track-gray-950 customScrollbar `}
+          className={`flex-1 items-start mb-2 flex overflow-auto gap-2 lg:gap-4 pb-10 !scrollbar-track-gray-950 customScrollbar `}
         >
           {listProduct?.map((product: ProductType) => {
             return (
               <div key={product._id} className="min-w-[50%] lg:min-w-[20%] w-[20%] relative">
-                <ProductCard product={product} />
+                <ProductCard title={title} product={product} />
 
                 {pathName === "/favourite" && (
                   <TooltipProvider>

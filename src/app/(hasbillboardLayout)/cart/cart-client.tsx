@@ -46,25 +46,34 @@ function CartClientNotSuspen() {
     onOpen(item);
   };
   const handleCheckout = async () => {
-    const filterItemsOutOfStock = items.filter((item) => item.quantity !== 0);
-    if (!filterItemsOutOfStock.length) return;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_ADMIN}/checkout`, {
-      method: "POST",
-      body: JSON.stringify(filterItemsOutOfStock),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    if (data.statusCode === 401) {
-      toast({
-        title: data.message || "",
-        variant: "destructiveCustom",
-      });
-      fetchAPI();
+    const storage = localStorage.getItem("user");
+    if (!storage) {
+      window.location.href = "/auth";
       return;
+    } else {
+      const filterItemsOutOfStock = items.filter((item) => item.quantity !== 0);
+      if (!filterItemsOutOfStock.length) return;
+      window.location.href = "/confirm";
     }
-    window.location = data.url;
+    // const user = JSON.parse(storage)?.user;
+    // const response = await fetch(`${process.env.NEXT_PUBLIC_API_ADMIN}/checkout`, {
+    //   method: "POST",
+    //   body: JSON.stringify({ order: filterItemsOutOfStock, user_id: user?._id }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    // const data = await response.json();
+    // console.log(data);
+    // if (data.statusCode === 401) {
+    //   toast({
+    //     title: data.message || "",
+    //     variant: "destructiveCustom",
+    //   });
+    //   fetchAPI();
+    //   return;
+    // }
+    // window.location = data.url;
   };
 
   // const handleCheckout = async () => {

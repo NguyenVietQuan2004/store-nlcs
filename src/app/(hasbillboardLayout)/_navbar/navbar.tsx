@@ -5,6 +5,7 @@ import { ListCategoryResType } from "@/Type/CategoryTypes";
 import ListRoute from "@/app/(hasbillboardLayout)/_navbar/_components/list-route";
 import { billboardAPI } from "@/apiRequest/billboardAPI";
 import { ListBillboardResType } from "@/Type/BillboardTypes";
+import UserAvatar from "@/components/user-avatar";
 
 async function MainNav() {
   let listCategory: ListCategoryResType | null = null;
@@ -18,13 +19,15 @@ async function MainNav() {
     handlError({ consoleError: "GET_API_CATEGORY_ERROR", error });
   }
   return (
-    <div>
-      <ListRoute
-        store={store.data}
-        listCategory={listCategory && listCategory.data}
-        listBillboard={listBillboard && listBillboard.data}
-      />
-    </div>
+    <>
+      <div>
+        <ListRoute
+          store={store?.data}
+          listCategory={listCategory && listCategory.data}
+          listBillboard={listBillboard && listBillboard.data}
+        />{" "}
+      </div>
+    </>
   );
 }
 

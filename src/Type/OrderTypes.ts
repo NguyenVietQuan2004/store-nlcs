@@ -2,7 +2,13 @@
 
 import z from "zod";
 import { Product } from "@/Type/ProductType";
-
+const OrderItemSchema = z.object({
+  order_id: z.string(),
+  product_variant_id: z.string(),
+  quantity: z.number().min(1),
+  snapshot_price: z.number().min(0),
+  product: Product,
+});
 //ORDER DATA
 const Order = z.object({
   _id: z.string(),
@@ -11,15 +17,7 @@ const Order = z.object({
   address: z.string(),
   is_paid: z.boolean(),
   paid_at: z.date(),
-  listProductOrder: z.array(
-    z.object({
-      _id: Product,
-      size: z.string(),
-      color: z.string(),
-      amount: z.number(),
-      snapshot_price: z.number(),
-    })
-  ),
+  order_items: z.array(OrderItemSchema),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -82,8 +80,7 @@ export type CreateOrderResType = z.TypeOf<typeof CreateOrderRes>;
 
 // DELETE ORDER BODY TYPE
 export const DeleteOrderBody = z.object({
-  _id: z.string(),
-  store_id: z.string(),
+  order_id: z.string(),
 });
 export type DeleteOrderBodyType = z.TypeOf<typeof DeleteOrderBody>;
 

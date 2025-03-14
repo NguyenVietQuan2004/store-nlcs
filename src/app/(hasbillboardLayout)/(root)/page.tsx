@@ -47,7 +47,7 @@ export default async function Home() {
   }
   return (
     <div>
-      <h2 className="text-3xl font-medium mt-8 mb-10 text-[#606060] px-2 lg:px-20">Featured Product</h2>
+      <h2 className="text-3xl font-medium mt-2 lg:mt-8 mb-4 lg:mb-10 text-[#606060] px-2 lg:px-20">Featured Product</h2>
       {!response || !response?.data?.listProduct?.length ? (
         <div className="text-center my-4 px-20">No results found</div>
       ) : (
@@ -55,7 +55,7 @@ export default async function Home() {
           <ProductFeature listProduct={response?.data.listProduct} />
         </Suspense>
       )}
-      <div className="flex px-20 lg:grid grid-cols-3 gap-x-2 mt-2 overflow-auto">
+      <div className="flex pl-0 lg:px-20 lg:grid grid-cols-3 gap-x-2 mt-2 overflow-auto">
         {data?.data?.ImagesHomePage?.billboard_feature.map((value, index) => (
           <Link
             href={response?.data.listProduct?.[0]?.category?._id || ""}
@@ -83,6 +83,14 @@ export default async function Home() {
       </div>
 
       {/* <Insurance backgroundInsurance={data?.data?.ImagesHomePage?.background_insurance} /> */}
+      <h2 className="text-3xl font-medium mt-8 mb-10 text-[#606060] px-2 lg:px-20">New Product</h2>
+      {!data || !data?.data?.listProductNewDiscover?.length ? (
+        <div className="text-center my-4 px-20">No results found</div>
+      ) : (
+        <Suspense fallback={<div>loading...</div>}>
+          <ProductFeature scroll={true} listProduct={data?.data.listProductNewDiscover} title="new" />
+        </Suspense>
+      )}
       <Discover data={data} />
       <Banner billboardBST={data?.data?.ImagesHomePage?.billboard_banner} />
       {/* <Chat /> */}
